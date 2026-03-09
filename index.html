@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Golden Reels</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  min-height: 100vh;
+  background: #0a0800;
+  background-image: radial-gradient(ellipse at 50% 0%, #2a1e00 0%, #080600 55%);
+  display: flex; align-items: flex-start; justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  padding: 10px 6px 30px;
+}
+
+/* ══ MACHINE ══ */
+.machine { width: 100%; max-width: 460px; position: relative; }
+.machine-outer {
+  background: linear-gradient(160deg,#3a2800 0%,#1a1200 30%,#2e2000 70%,#1a1200 100%);
+  border-radius: 28px 28px 20px 20px; padding: 4px;
+  box-shadow: 0 0 0 1px #000, 0 0 60px rgba(212,160,23,.22), 0 40px 100px rgba(0,0,0,.95);
+}
+.machine-inner {
+  background: linear-gradient(175deg,#1c1c1c 0%,#0d0d0d 40%,#141414 100%);
+  border-radius: 25px 25px 17px 17px; overflow: hidden; border: 1px solid #222;
+}
+
+/* ══ BENNY DISPLAY (top of machine) ══ */
+.benny-display {
+  background: linear-gradient(180deg, #000, #0a0600);
+  border-bottom: 2px solid #c8900a;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Blinking border glow — stops when won */
+.benny-display.active-glow {
+  animation: bennyBorderBlink 1.2s ease-in-out infinite alternate;
+}
+@keyframes bennyBorderBlink {
+  from { box-shadow: inset 0 0 0px transparent, 0 0 0px transparent; border-bottom-color:#c8900a; }
+  to   { box-shadow: inset 0 0 20px rgba(255,215,0,.2), 0 0 18px rgba(255,215,0,.4); border-bottom-color:#ffd700; }
+}
+
+/* Scrolling marquee strip */
+.benny-marquee-wrap {
+  overflow: hidden;
+  padding: 5px 0 3px;
+  border-bottom: 1px solid rgba(255,215,0,.15);
+  position: relative;
+}
+.benny-marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: bmarquee 14s linear infinite;
+  width: max-content;
+}
+.benny-marquee-track.won {
+  animation: none;
+  justify-content: center;
+  width: 100%;
+}
+@keyframes bmarquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+.benny-marquee-text {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.58rem, 1.8vw, .72rem);
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 0 30px;
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255,215,0,.6);
+  animation: bennyTextBlink 1.2s ease-in-out infinite alternate;
+}
+.benny-marquee-text.won {
+  color: #fff8a0;
+  animation: none;
+  filter: drop-shadow(0 0 10px #ffd700);
+}
+@keyframes bennyTextBlink {
+  from { color: #c8900a; text-shadow: 0 0 4px rgba(200,144,10,.3); }
+  to   { color: #ffd700; text-shadow: 0 0 14px rgba(255,215,0,.9); }
+}
+
+/* Letter slots row */
+.benny-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  gap: 6px;
+}
+.benny-label {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.48rem, 1.4vw, .6rem);
+  color: rgba(255,215,0,.35);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.benny-letters {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.benny-slot {
+  width: clamp(26px,6.5vw,36px);
+  height: clamp(26px,6.5vw,36px);
+  background: linear-gradient(180deg,#1a1200,#0a0800);
+  border: 1.5px solid #3a2800;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.85rem,2.8vw,1.1rem);
+  font-weight: 900;
+  color: #2a2000;
+  transition: all .3s;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.6);
+  position: relative;
+  overflow: hidden;
+  animation: slotPulse 1.4s ease-in-out infinite alternate;
+}
+@keyframes slotPulse {
+  from { border-color: #2a1800; }
+  to   { border-color: #5a3a00; box-shadow: inset 0 2px 6px rgba(0,0,0,.6), 0 0 6px rgba(200,144,10,.2); }
+}
+.benny-slot.lit {
+  color: #fff8a0;
+  border-color: #ffd700;
+  background: linear-gradient(180deg,#3a2800,#1a1000);
+  box-shadow: 0 0 14px rgba(255,215,0,.8), inset 0 1px 0 rgba(255,215,0,.2);
+  text-shadow: 0 0 8px #ffd700;
+  animation: litSlotPulse .5s ease-in-out infinite alternate;
+}
+@keyframes litSlotPulse {
+  from { box-shadow: 0 0 8px rgba(255,215,0,.5); }
+  to   { box-shadow: 0 0 20px rgba(255,215,0,1), 0 0 30px rgba(255,215,0,.4); }
+}
+.benny-slot.lit::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(180deg,rgba(255,255,255,.12),transparent);
+}
+.benny-dot {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.6rem,1.8vw,.85rem);
+  color: rgba(255,215,0,.15);
+  margin: 0 1px;
+  animation: dotPulse 1.4s ease-in-out infinite alternate;
+}
+@keyframes dotPulse { from{opacity:.15} to{opacity:.5} }
+.benny-dot.lit { color: #ffd700; text-shadow: 0 0 6px #ffd700; animation: litDotPulse .5s ease-in-out infinite alternate; }
+@keyframes litDotPulse { from{opacity:.7} to{opacity:1; text-shadow:0 0 12px #ffd700;} }
+.benny-jp {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.5rem,1.4vw,.62rem);
+  color: rgba(255,200,0,.35);
+  text-align: right;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.benny-jp span {
+  display: block;
+  font-size: clamp(.65rem,1.9vw,.82rem);
+  color: #f5c842;
+  filter: drop-shadow(0 0 4px rgba(212,160,23,.5));
+  animation: jpBlink 1.2s ease-in-out infinite alternate;
+}
+@keyframes jpBlink {
+  from { color:#c8900a; filter:drop-shadow(0 0 2px rgba(200,144,10,.3)); }
+  to   { color:#fff8a0; filter:drop-shadow(0 0 10px rgba(255,215,0,.8)); }
+}
+
+/* ══ MARQUEE ══ */
+.marquee {
+  background: linear-gradient(180deg,#150f00,#0a0a0a);
+  border-bottom: 2px solid #c8900a;
+  padding: 10px 14px 8px; text-align: center; position: relative;
+}
+.bulb-row { display:flex; justify-content:space-between; padding:0 4px; margin-bottom:7px; }
+.bulb { width:10px; height:10px; border-radius:50%; background:#ffd700; box-shadow:0 0 8px #ffd700; animation:blinkBulb .8s ease-in-out infinite alternate; }
+.bulb:nth-child(2n) { background:#ff9900; box-shadow:0 0 8px #ff9900; animation-delay:.4s; }
+.bulb:nth-child(3n) { background:#ff3e3e; box-shadow:0 0 8px #ff3e3e; animation-delay:.2s; }
+.bulb:nth-child(4n) { background:#00e5ff; box-shadow:0 0 8px #00e5ff; animation-delay:.6s; }
+@keyframes blinkBulb { from{opacity:1;transform:scale(1)} to{opacity:.15;transform:scale(.7)} }
+.mtitle {
+  font-family:'Orbitron',monospace; font-size:clamp(1.05rem,4.5vw,1.6rem); font-weight:900; letter-spacing:5px;
+  background:linear-gradient(180deg,#fff8c8 0%,#ffd700 45%,#a06800 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 8px rgba(212,160,23,.7));
+}
+.msub { font-size:.58rem; letter-spacing:5px; color:rgba(255,200,0,.3); text-transform:uppercase; margin-top:3px; }
+
+/* ══ WIN TICKER ══ */
+.win-banner { background:#050505; border-bottom:1px solid rgba(200,144,10,.3); min-height:30px; display:flex; align-items:center; justify-content:center; padding:4px 10px; }
+#winText { font-family:'Orbitron',monospace; font-size:clamp(.62rem,2vw,.82rem); color:#f5c842; letter-spacing:2px; text-align:center; transition:color .3s; }
+#winText.big { color:#fff8a0; animation:bigWin .4s ease infinite alternate; }
+@keyframes bigWin { from{filter:drop-shadow(0 0 6px #ffd700);letter-spacing:2px} to{filter:drop-shadow(0 0 18px #ffd700);letter-spacing:4px} }
+
+/* ══ REEL SECTION ══ */
+.reel-section { padding:10px; background:#060606; }
+.reel-bezel {
+  background:linear-gradient(180deg,#1a1400,#0a0a0a,#1a1400); border-radius:12px; padding:5px;
+  box-shadow: inset 0 4px 12px rgba(0,0,0,.8), 0 0 0 2px #c8900a, 0 0 20px rgba(200,144,10,.2);
+}
+.reel-window {
+  display:flex; gap:4px; background:#020202; border-radius:8px; overflow:hidden; position:relative;
+}
+.reel-window::before,.reel-window::after {
+  content:''; position:absolute; left:0; right:0; height:28%; z-index:10; pointer-events:none;
+}
+.reel-window::before { top:0; background:linear-gradient(180deg,rgba(0,0,0,.75),transparent); }
+.reel-window::after  { bottom:0; background:linear-gradient(0deg,rgba(0,0,0,.75),transparent); }
+.payline-bar {
+  position:absolute; left:0; right:0; z-index:9; pointer-events:none;
+  border-top:2px solid rgba(255,215,0,.6); border-bottom:2px solid rgba(255,215,0,.6);
+  background:rgba(255,215,0,.04); transition:background .3s,border-color .3s;
+}
+.payline-bar.flash { background:rgba(255,215,0,.18); border-color:#ffd700; box-shadow:inset 0 0 20px rgba(255,215,0,.25); animation:plFlash .35s ease infinite alternate; }
+@keyframes plFlash { from{background:rgba(255,215,0,.1)} to{background:rgba(255,215,0,.28)} }
+.reel { flex:1; overflow:hidden; position:relative; }
+.reel-strip { display:flex; flex-direction:column; will-change:transform; }
+.sym-cell { display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; }
+.sym-cell::after { content:''; position:absolute; inset:3px; border-radius:8px; border:1px solid rgba(255,255,255,.06); pointer-events:none; }
+.sym-cell .icon { line-height:1; display:block; user-select:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+.sym-cell[data-sym="SEVEN"]   { background:radial-gradient(circle at 50% 40%,#1a0000,#0a0000); }
+.sym-cell[data-sym="SEVEN"] .icon { filter:drop-shadow(0 0 8px #ff2200); }
+/* ══ BENNY LETTER TILES — styled gold letter badges ══ */
+.sym-cell[data-sym="LB"],
+.sym-cell[data-sym="LE"],
+.sym-cell[data-sym="LN1"],
+.sym-cell[data-sym="LN2"],
+.sym-cell[data-sym="LY"] {
+  background: radial-gradient(circle at 50% 35%, #2a1e00, #0e0900);
+}
+.sym-cell[data-sym="LB"] .icon,
+.sym-cell[data-sym="LE"] .icon,
+.sym-cell[data-sym="LN1"] .icon,
+.sym-cell[data-sym="LN2"] .icon,
+.sym-cell[data-sym="LY"] .icon { display: none; }
+
+.benny-letter {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff8c0 0%, #ffd700 45%, #a06000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255,215,0,.8));
+  user-select: none;
+}
+.sym-cell[data-sym="LB"]::after,
+.sym-cell[data-sym="LE"]::after,
+.sym-cell[data-sym="LN1"]::after,
+.sym-cell[data-sym="LN2"]::after,
+.sym-cell[data-sym="LY"]::after {
+  border-color: rgba(255,215,0,.3) !important;
+}
+.sym-cell[data-sym="DIAMOND"] { background:radial-gradient(circle at 50% 40%,#001a2a,#000a14); }
+.sym-cell[data-sym="DIAMOND"] .icon { filter:drop-shadow(0 0 8px #00cfff); }
+.sym-cell[data-sym="BELL"]    { background:radial-gradient(circle at 50% 40%,#1a1500,#0a0900); }
+.sym-cell[data-sym="BELL"] .icon { filter:drop-shadow(0 0 8px #ffc400); }
+.sym-cell[data-sym="CHERRY"]  { background:radial-gradient(circle at 50% 40%,#1a0008,#0a0004); }
+.sym-cell[data-sym="CHERRY"] .icon { filter:drop-shadow(0 0 6px #ff0040); }
+.sym-cell[data-sym="LEMON"]   { background:radial-gradient(circle at 50% 40%,#121000,#0a0800); }
+.sym-cell[data-sym="LEMON"] .icon { filter:drop-shadow(0 0 6px #d4d400); }
+.sym-cell[data-sym="ORANGE"]  { background:radial-gradient(circle at 50% 40%,#140900,#0a0500); }
+.sym-cell[data-sym="ORANGE"] .icon { filter:drop-shadow(0 0 6px #ff7700); }
+.sym-cell[data-sym="GRAPE"]   { background:radial-gradient(circle at 50% 40%,#100018,#07000e); }
+.sym-cell[data-sym="GRAPE"] .icon { filter:drop-shadow(0 0 6px #aa44ff); }
+.sym-cell[data-sym="MELON"]   { background:radial-gradient(circle at 50% 40%,#001408,#000a04); }
+.sym-cell[data-sym="MELON"] .icon { filter:drop-shadow(0 0 6px #00cc44); }
+.sym-cell.win-cell { animation:cellWin .4s ease infinite alternate; }
+@keyframes cellWin { from{box-shadow:inset 0 0 0 2px transparent} to{box-shadow:inset 0 0 0 2px #ffd700,inset 0 0 14px rgba(255,215,0,.3)} }
+
+/* ══ CREDITS ══ */
+.credits-panel { display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; padding:7px 10px; background:#060606; border-top:1px solid rgba(200,144,10,.22); border-bottom:1px solid rgba(200,144,10,.22); }
+.cbox { background:linear-gradient(180deg,#0d0d0d,#060606); border:1px solid #202020; border-radius:8px; padding:5px 6px; text-align:center; box-shadow:inset 0 2px 6px rgba(0,0,0,.5); }
+.clbl { font-size:.5rem; letter-spacing:2px; text-transform:uppercase; color:rgba(180,180,180,.35); }
+.cval { font-family:'Orbitron',monospace; font-size:clamp(.65rem,2.3vw,.92rem); font-weight:700; color:#f5c842; filter:drop-shadow(0 0 4px rgba(212,160,23,.4)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cval.green { color:#2ecc71; filter:drop-shadow(0 0 4px rgba(46,204,113,.4)); }
+
+/* ══ BET ══ */
+.bet-section { padding:7px 10px 5px; background:#060606; }
+.slbl { font-size:.52rem; letter-spacing:3px; text-transform:uppercase; color:rgba(200,144,10,.32); text-align:center; margin-bottom:5px; }
+.denom-row { display:flex; gap:3px; }
+.dbtn { flex:1; background:linear-gradient(180deg,#191919,#0e0e0e); border:1px solid #2a2a2a; border-radius:7px; color:#888; font-family:'Rajdhani',sans-serif; font-size:clamp(.58rem,1.7vw,.76rem); font-weight:700; padding:7px 2px; cursor:pointer; text-align:center; transition:all .12s; }
+.dbtn:hover { border-color:#c8900a; color:#f5c842; }
+.dbtn.on { border-color:#f5c842; color:#fff8c0; background:linear-gradient(180deg,#201700,#130f00); box-shadow:0 0 10px rgba(212,160,23,.2); }
+
+/* ══ ACTIONS ══ */
+.action-section { display:flex; gap:6px; padding:7px 10px 9px; background:linear-gradient(180deg,#060606,#040404); }
+.cash-col { display:flex; flex-direction:column; gap:4px; flex:1; }
+.ci-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+.bci { background:linear-gradient(180deg,#0b1c0b,#071007); border:1px solid #1a381a; border-radius:7px; color:#5cb85c; font-family:'Rajdhani',sans-serif; font-size:clamp(.58rem,1.7vw,.73rem); font-weight:700; padding:7px 3px; cursor:pointer; text-align:center; transition:all .12s; }
+.bci:hover { border-color:#5cb85c; color:#81c784; box-shadow:0 0 8px rgba(92,184,92,.2); }
+.bco { background:linear-gradient(180deg,#1c0b0b,#100707); border:1px solid #381a1a; border-radius:7px; color:#e57373; font-family:'Rajdhani',sans-serif; font-size:clamp(.6rem,1.8vw,.74rem); font-weight:700; padding:7px 3px; cursor:pointer; text-align:center; transition:all .12s; }
+.bco:hover { border-color:#e57373; box-shadow:0 0 8px rgba(229,115,115,.2); }
+.bspin { flex:1.4; background:linear-gradient(180deg,#2c1e00,#160e00,#2c1e00); border:2px solid #c8900a; border-radius:12px; color:#ffe680; font-family:'Orbitron',monospace; font-size:clamp(.82rem,2.6vw,1.05rem); font-weight:900; letter-spacing:3px; cursor:pointer; overflow:hidden; position:relative; box-shadow:0 0 20px rgba(200,144,10,.18),inset 0 1px 0 rgba(255,215,0,.1); transition:all .15s; text-transform:uppercase; }
+.bspin:hover { border-color:#ffe680; color:#fff; box-shadow:0 0 30px rgba(200,144,10,.5); transform:translateY(-1px); }
+.bspin:active { transform:translateY(1px); }
+.bspin:disabled { opacity:.3; cursor:not-allowed; transform:none; }
+.bspin::before { content:''; position:absolute; top:0; left:-120%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,215,0,.15),transparent); animation:shimBtn 2.5s linear infinite; }
+@keyframes shimBtn { to{left:160%;} }
+
+/* ══ PAYTABLE ══ */
+.paytable { background:#040404; border-top:2px solid #c8900a; padding:7px 10px 10px; }
+.pgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+.pitem { background:#0c0c0c; border:1px solid #1c1c1c; border-radius:6px; padding:5px 3px; text-align:center; }
+.psym { font-size:clamp(.8rem,2.6vw,1.05rem); line-height:1.3; }
+.pmult { font-family:'Orbitron',monospace; font-size:clamp(.44rem,1.3vw,.55rem); color:#f5c842; margin-top:2px; }
+.pitem.benny-pay { border-color:#c8900a; background:linear-gradient(180deg,#1a1200,#0a0800); }
+.pitem.benny-pay .pmult { color:#ffd700; filter:drop-shadow(0 0 4px rgba(255,215,0,.5)); }
+
+/* ══ WIN LOG ══ */
+.win-log-section {
+  background:#040404;
+  border-top:2px solid #c8900a;
+  padding:8px 10px 10px;
+  border-radius:0 0 14px 14px;
+}
+.win-log-title { font-size:.52rem; letter-spacing:3px; text-transform:uppercase; color:rgba(200,144,10,.32); text-align:center; margin-bottom:6px; }
+.win-log-list { max-height:90px; overflow-y:auto; display:flex; flex-direction:column; gap:3px; }
+.win-log-list::-webkit-scrollbar { width:3px; }
+.win-log-list::-webkit-scrollbar-track { background:#0a0a0a; }
+.win-log-list::-webkit-scrollbar-thumb { background:#3a2800; border-radius:2px; }
+.win-log-entry {
+  background:linear-gradient(90deg,#0e0e00,#0a0a0a);
+  border:1px solid #2a2000;
+  border-radius:6px;
+  padding:5px 10px;
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.5rem,1.4vw,.62rem);
+  color:#f5c842;
+  letter-spacing:.5px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.win-log-entry.mega {
+  border-color:#ffd700;
+  background:linear-gradient(90deg,#1a1200,#0d0d0d);
+  color:#fff8a0;
+  filter:drop-shadow(0 0 4px rgba(255,215,0,.3));
+  animation:logGlow 2s ease infinite alternate;
+}
+@keyframes logGlow { from{border-color:#c8900a} to{border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.2)} }
+.win-log-date { color:rgba(255,215,0,.4); font-size:clamp(.42rem,1.2vw,.54rem); }
+.no-log { font-family:'Rajdhani',sans-serif; font-size:.65rem; color:rgba(255,255,255,.15); text-align:center; padding:8px 0; letter-spacing:2px; }
+
+/* ══ ATTENDANT FLASH OVERLAY ══ */
+.attendant-overlay {
+  display:none;
+  position:fixed; inset:0; z-index:2000;
+  align-items:center; justify-content:center;
+  flex-direction:column;
+  background:rgba(0,0,0,.88);
+}
+.attendant-overlay.show { display:flex; }
+.attendant-box {
+  background:linear-gradient(180deg,#1a1200,#0a0800);
+  border:3px solid #ffd700;
+  border-radius:20px;
+  padding:30px 40px;
+  text-align:center;
+  box-shadow:0 0 60px rgba(255,215,0,.5),inset 0 0 40px rgba(255,215,0,.05);
+  animation:attPulse .5s ease infinite alternate;
+  max-width:320px;
+}
+@keyframes attPulse {
+  from { box-shadow:0 0 40px rgba(255,215,0,.4),inset 0 0 20px rgba(255,215,0,.04); border-color:#c8900a; }
+  to   { box-shadow:0 0 80px rgba(255,215,0,.8),inset 0 0 40px rgba(255,215,0,.08); border-color:#ffd700; }
+}
+.att-icon { font-size:3rem; margin-bottom:10px; animation:attBounce .6s ease infinite alternate; }
+@keyframes attBounce { from{transform:scale(1)} to{transform:scale(1.15)} }
+.att-title { font-family:'Orbitron',monospace; font-size:clamp(1rem,4vw,1.3rem); font-weight:900; color:#ffd700; text-shadow:0 0 14px #ffd700; letter-spacing:3px; margin-bottom:6px; }
+.att-sub { font-family:'Rajdhani',sans-serif; font-size:clamp(.8rem,2.5vw,1rem); color:rgba(255,220,100,.7); letter-spacing:2px; margin-bottom:14px; }
+.att-amount { font-family:'Orbitron',monospace; font-size:clamp(1.1rem,4.5vw,1.6rem); font-weight:900; color:#fff8a0; filter:drop-shadow(0 0 12px #ffd700); margin-bottom:18px; }
+.att-cashout-btn {
+  background:linear-gradient(180deg,#2a1e00,#160e00);
+  border:2px solid #ffd700; border-radius:10px;
+  color:#ffe680; font-family:'Orbitron',monospace;
+  font-size:clamp(.7rem,2.2vw,.88rem); font-weight:700;
+  padding:10px 24px; cursor:pointer; letter-spacing:2px;
+  transition:all .15s; text-transform:uppercase;
+}
+.att-cashout-btn:hover { background:linear-gradient(180deg,#3a2800,#1e1400); box-shadow:0 0 20px rgba(255,215,0,.4); }
+.att-flash-ring {
+  position:absolute; inset:-6px; border-radius:26px;
+  border:3px solid transparent;
+  animation:ringFlash .3s linear infinite;
+}
+@keyframes ringFlash {
+  0%,100%{ border-color:transparent; }
+  50%    { border-color:#ffd700; box-shadow:0 0 20px #ffd700; }
+}
+
+/* ══ TOAST ══ */
+.toast { position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-90px); background:#0c0c0c; border:1px solid #c8900a; color:#f5c842; font-family:'Orbitron',monospace; font-size:clamp(.6rem,1.8vw,.78rem); letter-spacing:1px; padding:8px 20px; border-radius:30px; z-index:999; transition:transform .35s cubic-bezier(.34,1.56,.64,1); box-shadow:0 0 18px rgba(200,144,10,.28); white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+.coin { position:fixed; font-size:1.3rem; pointer-events:none; z-index:998; animation:coinFall .9s ease-in forwards; }
+@keyframes coinFall { 0%{transform:translateY(-20px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(540deg);opacity:0} }
+</style>
+</head>
+<body>
+<div class="machine">
+<div class="machine-outer">
+<div class="machine-inner">
+
+  <!-- BENNY DISPLAY -->
+  <div class="benny-display active-glow" id="bennyDisplay">
+    <!-- Scrolling marquee -->
+    <div class="benny-marquee-wrap">
+      <div class="benny-marquee-track" id="bennyMarqueeTrack">
+        <span class="benny-marquee-text" id="bennyMarqueeText">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp;</span>
+        <span class="benny-marquee-text" aria-hidden="true">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp;</span>
+      </div>
+    </div>
+    <!-- Letter slots + jackpot amount -->
+    <div class="benny-bottom-row">
+      <div class="benny-label">Special</div>
+      <div class="benny-letters" id="bennyLetters">
+        <div class="benny-slot" id="bs0">B</div>
+        <div class="benny-dot" id="bd0">·</div>
+        <div class="benny-slot" id="bs1">E</div>
+        <div class="benny-dot" id="bd1">·</div>
+        <div class="benny-slot" id="bs2">N</div>
+        <div class="benny-dot" id="bd2">·</div>
+        <div class="benny-slot" id="bs3">N</div>
+        <div class="benny-dot" id="bd3">·</div>
+        <div class="benny-slot" id="bs4">Y</div>
+      </div>
+      <div class="benny-jp">JACKPOT<span>₱1,000,000</span></div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="bulb-row" id="bulbs"></div>
+    <div class="mtitle">✦ GOLDEN REELS ✦</div>
+    <div class="msub">Premium Casino · 5 Reels · 3 Rows · 5 Lines</div>
+  </div>
+
+  <!-- WIN TICKER -->
+  <div class="win-banner"><div id="winText">— INSERT CREDITS TO PLAY —</div></div>
+
+  <!-- REELS -->
+  <div class="reel-section">
+    <div class="reel-bezel">
+      <div class="reel-window" id="reelWindow">
+        <div class="payline-bar" id="paylineBar"></div>
+        <div class="reel" id="r0"></div>
+        <div class="reel" id="r1"></div>
+        <div class="reel" id="r2"></div>
+        <div class="reel" id="r3"></div>
+        <div class="reel" id="r4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREDITS -->
+  <div class="credits-panel">
+    <div class="cbox"><div class="clbl">Credits</div><div class="cval" id="dCr">₱0</div></div>
+    <div class="cbox"><div class="clbl">Total Bet</div><div class="cval" id="dBt">₱50</div></div>
+    <div class="cbox"><div class="clbl">Last Win</div><div class="cval green" id="dWn">₱0</div></div>
+  </div>
+
+  <!-- BET DENOM -->
+  <div class="bet-section">
+    <div class="slbl">◈ Bet Per Line ◈</div>
+    <div class="denom-row" id="drow">
+      <button class="dbtn" data-b="1">₱1</button>
+      <button class="dbtn" data-b="5">₱5</button>
+      <button class="dbtn" data-b="10">₱10</button>
+      <button class="dbtn on" data-b="25">₱25</button>
+      <button class="dbtn" data-b="50">₱50</button>
+      <button class="dbtn" data-b="100">₱100</button>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="action-section">
+    <div class="cash-col">
+      <div class="slbl" style="margin-bottom:2px;">◈ Cash In ◈</div>
+      <div class="ci-grid">
+        <button class="bci" onclick="cashIn(50)">＋₱50</button>
+        <button class="bci" onclick="cashIn(100)">＋₱100</button>
+        <button class="bci" onclick="cashIn(500)">＋₱500</button>
+        <button class="bci" onclick="cashIn(1000)">＋₱1,000</button>
+      </div>
+      <button class="bco" onclick="cashOut()">⬇ CASH OUT</button>
+    </div>
+    <button class="bspin" id="spinBtn" onclick="doSpin()">SPIN</button>
+  </div>
+
+  <!-- PAYTABLE -->
+  <div class="paytable">
+    <div class="slbl">◈ Pay Table ◈</div>
+    <div class="pgrid">
+      <div class="pitem benny-pay"><div class="psym" style="font-family:'Orbitron',monospace;font-weight:900;background:linear-gradient(180deg,#fff8c0,#ffd700,#a06000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;">B·E·N·N·Y</div><div class="pmult">ANY LINE = ₱1M</div></div>
+      <div class="pitem"><div class="psym">7️⃣7️⃣7️⃣</div><div class="pmult">×200</div></div>
+      <div class="pitem"><div class="psym">💎💎💎</div><div class="pmult">×100</div></div>
+      <div class="pitem"><div class="psym">🔔🔔🔔</div><div class="pmult">×50</div></div>
+      <div class="pitem"><div class="psym">🍒🍒🍒</div><div class="pmult">×25</div></div>
+      <div class="pitem"><div class="psym">🍋🍋🍋</div><div class="pmult">×15</div></div>
+      <div class="pitem"><div class="psym">🍊🍊🍊</div><div class="pmult">×10</div></div>
+      <div class="pitem"><div class="psym">🍇🍇🍇</div><div class="pmult">×8</div></div>
+    </div>
+  </div>
+
+  <!-- WIN LOG -->
+  <div class="win-log-section">
+    <div class="win-log-title">◈ Jackpot Winners Log ◈</div>
+    <div class="win-log-list" id="winLogList">
+      <div class="no-log" id="noLogMsg">No jackpot winners yet</div>
+    </div>
+  </div>
+
+</div><!-- /machine-inner -->
+</div><!-- /machine-outer -->
+</div><!-- /machine -->
+
+<!-- ATTENDANT OVERLAY -->
+<div class="attendant-overlay" id="attendantOverlay">
+  <div class="attendant-box" style="position:relative;">
+    <div class="att-flash-ring"></div>
+    <div class="att-icon">🔔</div>
+    <div class="att-title">CALL ATTENDANT</div>
+    <div class="att-sub">🎉 BENNY JACKPOT! 🎉</div>
+    <div class="att-amount">₱1,000,000.00</div>
+    <button class="att-cashout-btn" onclick="bennyCashOut()">✦ CASH OUT ✦</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  SYMBOLS
+// ═══════════════════════════════════════
+// B, E, N1, N2, Y are letter fruit symbols.
+// ALL 5 letters appear in EVERY column's pool.
+// Win = any payline reads B·E·N·N·Y left→right
+// across cols 0–4 on that line (exact sequence).
+// Letters are rendered as styled gold text on reels.
+
+const SYMS = [
+  { id:'LB',      letter:'B', pay:0   },
+  { id:'LE',      letter:'E', pay:0   },
+  { id:'LN1',     letter:'N', pay:0   },
+  { id:'LN2',     letter:'N', pay:0   },
+  { id:'LY',      letter:'Y', pay:0   },
+  { id:'SEVEN',   icon:'7️⃣',  pay:200 },
+  { id:'DIAMOND', icon:'💎',  pay:100 },
+  { id:'BELL',    icon:'🔔',  pay:50  },
+  { id:'CHERRY',  icon:'🍒',  pay:25  },
+  { id:'LEMON',   icon:'🍋',  pay:15  },
+  { id:'ORANGE',  icon:'🍊',  pay:10  },
+  { id:'GRAPE',   icon:'🍇',  pay:8   },
+  { id:'MELON',   icon:'🍉',  pay:5   },
+];
+
+// Shared pool — all 5 BENNY letters appear in every column.
+// Each letter appears once; pool size = 43 fruits + 5 letters = 48.
+const SHARED_POOL = [
+  'LB','LE','LN1','LN2','LY',          // one of each letter
+  'SEVEN',
+  'DIAMOND','DIAMOND',
+  'BELL','BELL','BELL',
+  'CHERRY','CHERRY','CHERRY','CHERRY','CHERRY',
+  'LEMON','LEMON','LEMON','LEMON','LEMON','LEMON',
+  'ORANGE','ORANGE','ORANGE','ORANGE','ORANGE','ORANGE','ORANGE',
+  'GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE',
+  'MELON','MELON','MELON','MELON','MELON','MELON','MELON','MELON','MELON',
+];
+
+const BENNY_IDS = new Set(['LB','LE','LN1','LN2','LY']);
+
+const symById = {};
+SYMS.forEach(s => symById[s.id] = s);
+
+function randSymForCol(col) {
+  return SHARED_POOL[Math.floor(Math.random() * SHARED_POOL.length)];
+}
+function randSym() {
+  return SHARED_POOL[Math.floor(Math.random() * SHARED_POOL.length)];
+}
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+const COLS=5, ROWS=3, LINES=5, MAX_CREDITS=50000;
+let credits=0, bet=25, lastWin=0, spinning=false;
+let currentGrid=null;
+let bennyActive=false; // true while waiting for attendant cashout
+let winSoundNodes=[];
+
+// ═══════════════════════════════════════
+//  BENNY SYSTEM
+// ═══════════════════════════════════════
+// Each time a BENNY symbol lands, light up next letter
+// When all 5 lit → trigger ₱1M jackpot
+// Clears all letter lights (called at start of each spin)
+function updateBennyDisplay() {
+  for (let i=0;i<5;i++) {
+    document.getElementById('bs'+i)?.classList.remove('lit');
+    document.getElementById('bd'+i)?.classList.remove('lit');
+  }
+}
+
+function resetBenny() {
+  bennyActive = false;
+  updateBennyDisplay();
+  // Restore scrolling marquee
+  const track = document.getElementById('bennyMarqueeTrack');
+  const texts = track.querySelectorAll('.benny-marquee-text');
+  track.classList.remove('won');
+  texts.forEach(t => { t.classList.remove('won'); t.textContent = '✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱1,000,000.00 · ✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱1,000,000.00 · '; });
+  document.getElementById('bennyDisplay').classList.add('active-glow');
+  startBennyTeaser();
+}
+
+function setBennyWonMarquee() {
+  // Replace marquee with static WON message
+  const track = document.getElementById('bennyMarqueeTrack');
+  const texts = track.querySelectorAll('.benny-marquee-text');
+  track.classList.add('won');
+  texts[0].classList.add('won');
+  texts[0].textContent = '🏆  B · E · N · N · Y  JACKPOT WON!  ₱1,000,000.00  —  SEE ATTENDANT  🏆';
+  if (texts[1]) texts[1].textContent = '';
+  document.getElementById('bennyDisplay').classList.remove('active-glow');
+  stopBennyTeaser();
+}
+
+// ─── BENNY TEASER SOUND (subtle looping chime while unwon) ───
+let teaserInterval = null;
+let teaserEnabled  = false;
+
+function startBennyTeaser() {
+  if (teaserInterval) return;
+  teaserEnabled = true;
+  // Play a soft rising 2-note chime every 6 seconds
+  teaserInterval = setInterval(() => {
+    if (!teaserEnabled || spinning || bennyActive) return;
+    try {
+      const a = ga();
+      // Soft bell-like ping: two notes, quiet
+      [[1047, 0], [1319, 0.18]].forEach(([f, d]) => {
+        const o = a.createOscillator(), g = a.createGain();
+        o.connect(g); g.connect(a.destination);
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, a.currentTime + d);
+        g.gain.linearRampToValueAtTime(0.08, a.currentTime + d + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + d + 0.6);
+        o.start(a.currentTime + d); o.stop(a.currentTime + d + 0.65);
+      });
+      // Every 3rd chime, add a sparkle shimmer
+      teaserCount = (teaserCount || 0) + 1;
+      if (teaserCount % 3 === 0) {
+        for (let i=0;i<5;i++) {
+          const f = 800 + i*300;
+          const o = a.createOscillator(), g = a.createGain();
+          o.connect(g); g.connect(a.destination);
+          o.type = 'sine'; o.frequency.value = f;
+          g.gain.setValueAtTime(0, a.currentTime + 0.36 + i*0.04);
+          g.gain.linearRampToValueAtTime(0.05, a.currentTime + 0.37 + i*0.04);
+          g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.56 + i*0.04);
+          o.start(a.currentTime + 0.36 + i*0.04);
+          o.stop(a.currentTime + 0.6 + i*0.04);
+        }
+      }
+    } catch(e){}
+  }, 6000);
+}
+
+let teaserCount = 0;
+
+function stopBennyTeaser() {
+  teaserEnabled = false;
+  if (teaserInterval) { clearInterval(teaserInterval); teaserInterval = null; }
+}
+
+// ═══════════════════════════════════════
+//  WIN LOG (persisted via localStorage)
+// ═══════════════════════════════════════
+const LOG_KEY = 'goldenreels_winners';
+const LOG_TTL  = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
+
+function loadLog() {
+  try {
+    const raw = localStorage.getItem(LOG_KEY);
+    if (!raw) return [];
+    const entries = JSON.parse(raw);
+    const now = Date.now();
+    return entries.filter(e => (now - e.ts) < LOG_TTL);
+  } catch(e) { return []; }
+}
+
+function saveLog(entries) {
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(entries)); } catch(e){}
+}
+
+function addLogEntry(amount) {
+  const entries = loadLog();
+  const now = new Date();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  const yy = String(now.getFullYear()).slice(-2);
+  entries.unshift({ ts: Date.now(), amount, date: `${mm}/${dd}/${yy}` });
+  saveLog(entries);
+  renderLog();
+}
+
+function renderLog() {
+  const list = document.getElementById('winLogList');
+  const noMsg = document.getElementById('noLogMsg');
+  const entries = loadLog();
+  // Remove old ones from storage too
+  saveLog(entries);
+  list.innerHTML = '';
+  if (entries.length === 0) {
+    const d = document.createElement('div');
+    d.className = 'no-log'; d.id = 'noLogMsg';
+    d.textContent = 'No jackpot winners yet';
+    list.appendChild(d);
+    return;
+  }
+  entries.forEach(e => {
+    const row = document.createElement('div');
+    row.className = 'win-log-entry mega';
+    row.innerHTML = `<span>₱${Number(e.amount).toLocaleString('en-PH',{minimumFractionDigits:2})} Won</span><span class="win-log-date">${e.date}</span>`;
+    list.appendChild(row);
+  });
+}
+
+// ═══════════════════════════════════════
+//  REEL SETUP
+// ═══════════════════════════════════════
+let CELL_H=80;
+const STRIP_SYMS=30;
+
+function buildReels() {
+  measureCell();
+  for (let c=0;c<COLS;c++) {
+    const reel = document.getElementById('r'+c);
+    reel.style.height = (CELL_H*ROWS)+'px';
+    reel.innerHTML='';
+    const strip=document.createElement('div');
+    strip.className='reel-strip';
+    strip.id='strip'+c;
+    // Use column-specific pool so BENNY letters can appear in filler too
+    for (let i=0;i<STRIP_SYMS;i++) strip.appendChild(makeCell(randSymForCol(c)));
+    reel.appendChild(strip);
+  }
+  const pb=document.getElementById('paylineBar');
+  pb.style.top=CELL_H+'px'; pb.style.height=CELL_H+'px';
+}
+
+function measureCell() {
+  const rw=document.getElementById('reelWindow');
+  const cw=Math.floor((rw.clientWidth - 4*4)/COLS);
+  CELL_H=Math.min(100,Math.max(60,Math.floor(cw*0.88)));
+}
+
+function makeCell(symId) {
+  const sym  = symById[symId];
+  const cell = document.createElement('div');
+  cell.className      = 'sym-cell';
+  cell.dataset.sym    = symId;
+  cell.style.height    = CELL_H + 'px';
+  cell.style.minHeight = CELL_H + 'px';
+
+  if (BENNY_IDS.has(symId)) {
+    // Render as styled gold letter — no emoji at all
+    const icon = document.createElement('span');
+    icon.className = 'icon'; // hidden via CSS
+    cell.appendChild(icon);
+
+    const letter = document.createElement('span');
+    letter.className  = 'benny-letter';
+    letter.textContent = sym.letter; // 'B', 'E', 'N', or 'Y'
+    letter.style.fontSize = Math.floor(CELL_H * 0.58) + 'px';
+    cell.appendChild(letter);
+  } else {
+    const icon = document.createElement('span');
+    icon.className  = 'icon';
+    icon.textContent = sym.icon;
+    icon.style.fontSize = Math.floor(CELL_H * 0.52) + 'px';
+    cell.appendChild(icon);
+  }
+
+  return cell;
+}
+
+// ═══════════════════════════════════════
+//  OUTCOME
+// ═══════════════════════════════════════
+function getOutcome() {
+  const grid = [];
+  for (let c=0;c<COLS;c++) grid.push([randSym(), randSym(), randSym()]);
+
+  // 40% win nudge — regular fruits only, never overwrites a BENNY letter cell
+  if (Math.random() < 0.40) {
+    const r = Math.random();
+    const fs = r<0.004?'SEVEN' : r<0.014?'DIAMOND' : r<0.044?'BELL' :
+               r<0.14?'CHERRY' : r<0.30?'LEMON' : r<0.56?'ORANGE' : 'GRAPE';
+    const ml = Math.random()<0.12?5 : Math.random()<0.30?4 : 3;
+    for (let i=0;i<ml;i++) {
+      if (!BENNY_IDS.has(grid[i][1])) grid[i][1] = fs;
+    }
+  }
+  return grid;
+}
+
+function checkBenny(grid) {
+  // Win condition: any payline reads LB·LE·LN1·LN2·LY (= B·E·N·N·Y) left→right.
+  // All 5 letters in order across cols 0–4 on the same line.
+  const linePatterns = [[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
+  const BENNY_SEQ   = ['LB','LE','LN1','LN2','LY'];
+
+  let isBenny = false;
+
+  linePatterns.forEach(lp => {
+    const row = lp.map((r,c) => grid[c][r]);
+    if (BENNY_SEQ.every((id,i) => row[i]===id)) isBenny = true;
+  });
+
+  // Light up header letters whose position matched on ANY payline
+  for (let i=0;i<5;i++) {
+    const colMatched = linePatterns.some(lp => grid[i][lp[i]] === BENNY_SEQ[i]);
+    document.getElementById('bs'+i)?.classList.toggle('lit', colMatched);
+    document.getElementById('bd'+i)?.classList.toggle('lit', colMatched);
+  }
+
+  return isBenny;
+}
+
+function calcWin(grid) {
+  let total=0, maxM=0;
+  const linePatterns = [[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
+  linePatterns.forEach(lp => {
+    const row = lp.map((r,c) => grid[c][r]);
+    // Skip any line containing BENNY letters (handled separately)
+    if (row.some(s => BENNY_IDS.has(s))) return;
+    if (row.every(s => s===row[0])) {
+      const m=(symById[row[0]]?.pay||5)*2; total+=bet*m; maxM=Math.max(maxM,m); return;
+    }
+    if (row.slice(0,4).every(s => s===row[0])) {
+      const m=Math.floor((symById[row[0]]?.pay||5)*.6); total+=bet*m; maxM=Math.max(maxM,m); return;
+    }
+    if (row.slice(0,3).every(s => s===row[0])) {
+      const m=Math.floor((symById[row[0]]?.pay||5)*.25); total+=bet*m; maxM=Math.max(maxM,m); return;
+    }
+    if (row.filter(s=>s==='CHERRY').length>=2) { total+=bet*3; maxM=Math.max(maxM,3); }
+  });
+  return {total, maxM};
+}
+
+// ═══════════════════════════════════════
+//  SPIN ANIMATION
+// ═══════════════════════════════════════
+function spinReel(colIdx, finalCol, stopDelay) {
+  return new Promise(resolve=>{
+    const strip=document.getElementById('strip'+colIdx);
+    strip.innerHTML='';
+    const totalCells=28;
+    // Filler uses column-specific pool so BENNY letter can appear naturally
+    for (let i=0;i<totalCells;i++) strip.appendChild(makeCell(randSymForCol(colIdx)));
+    finalCol.forEach(sid=>strip.appendChild(makeCell(sid)));
+    strip.appendChild(makeCell(randSymForCol(colIdx)));
+    strip.appendChild(makeCell(randSymForCol(colIdx)));
+    const landY=-(totalCells*CELL_H);
+    strip.style.transition='none'; strip.style.transform='translateY(0)';
+    void strip.offsetHeight;
+    setTimeout(()=>{
+      const dur=500+colIdx*100+300;
+      strip.style.transition=`transform ${dur}ms cubic-bezier(0.15,0.0,0.2,1.0)`;
+      strip.style.transform=`translateY(${landY}px)`;
+      setTimeout(()=>{
+        strip.style.transition='none';
+        strip.style.transform=`translateY(${landY}px)`;
+        playTick(); resolve();
+      }, dur+30);
+    }, stopDelay);
+  });
+}
+
+// ═══════════════════════════════════════
+//  MAIN SPIN
+// ═══════════════════════════════════════
+async function doSpin() {
+  if (spinning||bennyActive) return;
+  if (credits<=0)          { showToast('⚠ Insert Credits First'); return; }
+  if (credits<bet*LINES)   { showToast('⚠ Insufficient Credits'); return; }
+
+  spinning=true;
+  credits-=bet*LINES; lastWin=0;
+  updateUI();
+  setWT('🎰  Spinning...', false);
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('paylineBar').classList.remove('flash');
+  clearWinCells();
+
+  soundSpin();
+  updateBennyDisplay(); // clear lights at start of every spin
+
+  const grid=getOutcome();
+  const stopGap=220;
+  await Promise.all([
+    spinReel(0,grid[0],0),
+    spinReel(1,grid[1],stopGap*1),
+    spinReel(2,grid[2],stopGap*2),
+    spinReel(3,grid[3],stopGap*3),
+    spinReel(4,grid[4],stopGap*4),
+  ]);
+  currentGrid=grid;
+  await sleep(120);
+
+  // Check BENNY first
+  const isBenny = checkBenny(grid);
+  if (isBenny) {
+    bennyActive=true;
+    spinning=false;
+    triggerBennyJackpot();
+    return;
+  }
+
+  const{total,maxM}=calcWin(grid);
+  lastWin=total;
+
+  if (total>0) {
+    credits+=total; soundWin(maxM);
+    document.getElementById('paylineBar').classList.add('flash');
+    highlightWinCells(grid);
+    if      (maxM>=100) { setWT(`🏆  JACKPOT!  +₱${fmt(total)}`,true); spawnCoins(20); showToast(`🏆 JACKPOT! ₱${fmt(total)}`); }
+    else if (maxM>=25)  { setWT(`🎊  BIG WIN!  +₱${fmt(total)}`,true); spawnCoins(10); }
+    else                { setWT(`✦  WIN  +₱${fmt(total)}`,false); spawnCoins(4); }
+    setTimeout(()=>{ document.getElementById('paylineBar').classList.remove('flash'); clearWinCells(); },3500);
+  } else {
+    soundLose(); setWT('— NO WIN —  TRY AGAIN —',false);
+  }
+
+  updateUI();
+  document.getElementById('spinBtn').disabled=false;
+  spinning=false;
+  if (credits<=0) setWT('⚠ OUT OF CREDITS — CASH IN',false);
+}
+
+// ═══════════════════════════════════════
+//  BENNY JACKPOT TRIGGER
+// ═══════════════════════════════════════
+function triggerBennyJackpot() {
+  // Flash all BENNY slots lit
+  for (let i=0;i<5;i++) {
+    document.getElementById('bs'+i)?.classList.add('lit');
+    document.getElementById('bd'+i)?.classList.add('lit');
+  }
+  // Switch marquee to WON state
+  setBennyWonMarquee();
+  // Show attendant overlay
+  document.getElementById('attendantOverlay').classList.add('show');
+  document.getElementById('paylineBar').classList.add('flash');
+  setWT('🌟  B·E·N·N·Y  JACKPOT  ₱1,000,000!  🌟', true);
+  spawnCoins(40);
+  soundBenny();
+  soundApplause();
+  document.getElementById('spinBtn').disabled=true;
+}
+
+function bennyCashOut() {
+  stopWinSound();
+  document.getElementById('attendantOverlay').classList.remove('show');
+  document.getElementById('paylineBar').classList.remove('flash');
+  clearWinCells();
+  addLogEntry(1000000);
+  setWT('💵  ₱1,000,000.00 — SEE ATTENDANT', true);
+  showToast('🏆 ₱1,000,000.00 Cashed Out!');
+  resetBenny(); // restores marquee scroll + teaser sound
+  document.getElementById('spinBtn').disabled=false;
+  spinning=false;
+}
+
+// ═══════════════════════════════════════
+//  WIN HIGHLIGHT
+// ═══════════════════════════════════════
+function highlightWinCells(grid) {
+  const row1=[0,1,2,3,4].map(c=>grid[c][1]);
+  let mc=0; const first=row1[0];
+  for (let i=0;i<5;i++) { if(row1[i]===first) mc++; else break; }
+  if (mc>=3) {
+    for (let i=0;i<mc;i++) {
+      const strip=document.getElementById('strip'+i);
+      const cells=strip.querySelectorAll('.sym-cell');
+      const idx=cells.length-4;
+      if (cells[idx]) cells[idx].classList.add('win-cell');
+    }
+  }
+}
+function clearWinCells() { document.querySelectorAll('.win-cell').forEach(c=>c.classList.remove('win-cell')); }
+
+// ═══════════════════════════════════════
+//  CASH IN / OUT
+// ═══════════════════════════════════════
+function cashIn(amount) {
+  if (bennyActive) { showToast('⚠ Jackpot pending — see attendant'); return; }
+  if (credits+amount>MAX_CREDITS) { showToast(`⚠ Max ₱${fmt(MAX_CREDITS)}`); return; }
+  soundCashIn(); credits+=amount; updateUI();
+  setWT(`✦  ₱${fmt(amount)} Credited`,false); showToast(`+₱${fmt(amount)} Added`);
+}
+function cashOut() {
+  if (bennyActive) { showToast('⚠ Jackpot pending — press Cash Out above'); return; }
+  if (credits<=0) { showToast('⚠ No Credits to Cash Out'); return; }
+  soundCashOut();
+  const amt=credits; spawnCoins(12);
+  showToast(`💰 Cashed Out ₱${fmt(amt)}`);
+  setWT(`💵  Cashed Out ₱${fmt(amt)}`,false);
+  credits=0; lastWin=0; updateUI();
+}
+
+// ═══════════════════════════════════════
+//  UI
+// ═══════════════════════════════════════
+function fmt(n) { return Math.floor(n).toLocaleString('en-PH'); }
+function updateUI() {
+  document.getElementById('dCr').textContent='₱'+fmt(credits);
+  document.getElementById('dBt').textContent='₱'+fmt(bet*LINES);
+  document.getElementById('dWn').textContent='₱'+fmt(lastWin);
+}
+function setWT(msg,big) {
+  const el=document.getElementById('winText');
+  el.textContent=msg; el.className=big?'big':'';
+}
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2300);
+}
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function spawnCoins(n) {
+  for (let i=0;i<n;i++) setTimeout(()=>{
+    const c=document.createElement('div'); c.className='coin'; c.textContent='🪙';
+    c.style.left=Math.random()*100+'vw'; c.style.top='-30px';
+    c.style.animationDuration=(.55+Math.random()*.85)+'s';
+    document.body.appendChild(c); setTimeout(()=>c.remove(),1500);
+  },i*65);
+}
+
+// ═══════════════════════════════════════
+//  AUDIO ENGINE
+// ═══════════════════════════════════════
+let actx=null;
+function ga() { if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
+
+function tone(freq,type,dur,vol=.3,delay=0,freqEnd=null) {
+  try {
+    const a=ga(), o=a.createOscillator(), g=a.createGain();
+    const ws=a.createWaveShaper(); ws.curve=makeDistCurve(8);
+    o.connect(ws); ws.connect(g); g.connect(a.destination);
+    o.type=type; o.frequency.setValueAtTime(freq,a.currentTime+delay);
+    if(freqEnd!==null) o.frequency.linearRampToValueAtTime(freqEnd,a.currentTime+delay+dur);
+    g.gain.setValueAtTime(0,a.currentTime+delay);
+    g.gain.linearRampToValueAtTime(vol,a.currentTime+delay+.015);
+    g.gain.setValueAtTime(vol,a.currentTime+delay+dur*.7);
+    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+delay+dur);
+    o.start(a.currentTime+delay); o.stop(a.currentTime+delay+dur+.05);
+    return{o,g};
+  } catch(e){return null;}
+}
+
+function makeDistCurve(amount) {
+  const n=256,curve=new Float32Array(n);
+  for(let i=0;i<n;i++){const x=(i*2)/n-1;curve[i]=((Math.PI+amount)*x)/(Math.PI+amount*Math.abs(x));}
+  return curve;
+}
+function stopWinSound() { winSoundNodes.forEach(n=>{try{n.o.stop();}catch(e){}}); winSoundNodes=[]; }
+
+function playTick()  { tone(260,'square',.06,.28); tone(520,'square',.04,.10,.01); }
+function soundSpin() { for(let i=0;i<12;i++) tone(120+i*28,'sawtooth',.09,.10,i*.038,160+i*40); tone(60,'sine',.45,.08); }
+
+function soundSmallWin() {
+  stopWinSound();
+  const notes=[523,659,784]; const gaps=[0,.09,.16];
+  notes.forEach((f,i)=>{const n=tone(f,'triangle',.18,.32,gaps[i],f*1.03);if(n)winSoundNodes.push(n);});
+  tone(1047,'sine',.12,.12,.18);
+}
+function soundMedWin() {
+  stopWinSound();
+  const notes=[392,523,659,784,880]; const gaps=[0,.11,.20,.27,.33];
+  notes.forEach((f,i)=>{const n=tone(f,'triangle',.22,.35,gaps[i],f*1.04);if(n)winSoundNodes.push(n);});
+  const nH=tone(394,'sine',.34,.14,.33);if(nH)winSoundNodes.push(nH);
+  tone(200,'sawtooth',.25,.08,.33,900);
+}
+function soundBigWin() {
+  stopWinSound();
+  const p1=[330,415,523,622,740,880,1047]; const g1=[0,.12,.22,.30,.37,.43,.48];
+  p1.forEach((f,i)=>{const n=tone(f,'triangle',.2,.38,g1[i],f*1.05);if(n)winSoundNodes.push(n);});
+  [[523,1],[659,1.2],[784,1.4]].forEach(([f])=>{const n=tone(f,'sine',.5,.4,.5);if(n)winSoundNodes.push(n);});
+  [1568,1319,1047,880].forEach((f,i)=>{const n=tone(f,'sine',.18,.25,1.0+i*.08);if(n)winSoundNodes.push(n);});
+  tone(80,'sine',.4,.22,.5);
+}
+function soundJackpot() {
+  stopWinSound();
+  const run=[262,330,392,494,587,698,784,880,988,1047,1175,1319];
+  const gaps=run.map((_,i)=>i*.048*(1-i*.003));
+  run.forEach((f,i)=>{const n=tone(f,'triangle',.15,.35,Math.max(gaps[i],0),f*1.05);if(n)winSoundNodes.push(n);});
+  [[523,.62],[659,.64],[784,.66],[1047,.68]].forEach(([f,d])=>{const n=tone(f,'sine',.8,.45,d);if(n)winSoundNodes.push(n);});
+  const melody=[[1047,.00,.18],[1319,.20,.18],[1568,.40,.22],[1319,.64,.12],[1047,.78,.12],[1319,.92,.12],[1568,1.06,.35],[1047,1.44,.18],[1175,1.64,.18],[1319,1.84,.22],[1568,2.08,.55]];
+  melody.forEach(([f,d,dur])=>{
+    const n=tone(f,'sine',dur,.42,1.5+d);if(n)winSoundNodes.push(n);
+    const n2=tone(f*.794,'sine',dur,.18,1.5+d);if(n2)winSoundNodes.push(n2);
+  });
+  for(let i=0;i<22;i++){const f=800+Math.random()*1200;const n=tone(f,'sine',.12,.2,2.0+i*.1);if(n)winSoundNodes.push(n);}
+  [0.62,1.1,1.5,2.0,2.5].forEach(d=>{tone(55,'sine',.3,.3,d);tone(110,'sine',.15,.15,d);});
+  [[523,4.2],[659,4.22],[784,4.24],[1047,4.26],[1319,4.28]].forEach(([f,d])=>{const n=tone(f,'sine',.9,.4,d);if(n)winSoundNodes.push(n);});
+}
+
+// ─── BENNY SOUND (~10s, 2× jackpot length) ───
+function soundBenny() {
+  stopWinSound();
+  // Phase 1: ultra-fast chromatic lightning run (0–0.7s)
+  const run=[130,165,196,247,294,349,392,494,587,698,784,880,988,1047,1175,1319,1568,1760];
+  const gaps=run.map((_,i)=>i*.035*(1-i*.001));
+  run.forEach((f,i)=>{const n=tone(f,'triangle',.12,.38,Math.max(gaps[i],0),f*1.06);if(n)winSoundNodes.push(n);});
+  // Phase 2: chord explosion (0.72s)
+  [[262,.72],[330,.74],[392,.76],[523,.78],[659,.80],[784,.82],[1047,.84]].forEach(([f,d])=>{
+    const n=tone(f,'sine',1.0,.44,d);if(n)winSoundNodes.push(n);
+  });
+  // Sub bass thump
+  [0.72,1.3,1.9,2.5,3.1,3.7,4.3,4.9].forEach(d=>{tone(41,'sine',.4,.35,d);tone(82,'sine',.2,.2,d+.05);});
+  // Phase 3: extended fanfare melody (1.9s–6.5s) — 2× normal melody
+  const melody=[
+    [1047,.00,.20],[1319,.22,.20],[1568,.44,.25],[1319,.72,.15],[1047,.90,.15],
+    [1319,1.08,.15],[1568,1.26,.40],[1047,1.72,.20],[1175,1.94,.20],[1319,2.16,.25],
+    [1568,2.44,.60],[1319,3.08,.20],[1175,3.30,.20],[1047,3.52,.20],[880,3.74,.15],
+    [1047,3.92,.20],[1319,4.14,.20],[1568,4.36,.25],[1760,4.64,.65],
+    // Second repeat at higher pitch
+    [2093,5.35,.20],[2637,5.58,.20],[3136,5.82,.30],[2637,6.15,.20],[2093,6.38,.20],[3136,6.62,.80],
+  ];
+  melody.forEach(([f,d,dur])=>{
+    const n=tone(f,'sine',dur,.42,1.9+d);if(n)winSoundNodes.push(n);
+    const n2=tone(f*.794,'sine',dur,.20,1.9+d);if(n2)winSoundNodes.push(n2);
+    const n3=tone(f*1.26,'sine',dur,.12,1.9+d);if(n3)winSoundNodes.push(n3); // fifth above
+  });
+  // Phase 4: coin shower pings (3.5s–8.5s)
+  for(let i=0;i<40;i++){
+    const f=600+Math.random()*2200;
+    const n=tone(f,'sine',.14,.22,3.5+i*.13);if(n)winSoundNodes.push(n);
+  }
+  // Phase 5: grand finale chord (8.5s)
+  [[262,8.5],[330,8.52],[392,8.54],[523,8.56],[659,8.58],[784,8.60],[1047,8.62],[1319,8.64],[1568,8.66]].forEach(([f,d])=>{
+    const n=tone(f,'sine',1.4,.45,d);if(n)winSoundNodes.push(n);
+  });
+}
+
+// ─── APPLAUSE (noise bursts simulating crowd) ───
+function soundApplause() {
+  try {
+    const a=ga();
+    // Run applause for 10 seconds in bursts
+    for(let burst=0;burst<30;burst++){
+      const startT=a.currentTime+0.3+burst*0.32;
+      const bufSize=a.sampleRate*0.25;
+      const buf=a.createBuffer(1,bufSize,a.sampleRate);
+      const data=buf.getChannelData(0);
+      for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.6;
+      const src=a.createBufferSource();
+      src.buffer=buf;
+      // Band-pass to sound like crowd
+      const bp=a.createBiquadFilter();
+      bp.type='bandpass'; bp.frequency.value=2000+Math.random()*1000; bp.Q.value=0.5;
+      const g=a.createGain();
+      g.gain.setValueAtTime(0,startT);
+      g.gain.linearRampToValueAtTime(0.18+Math.random()*0.1,startT+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,startT+0.22);
+      src.connect(bp); bp.connect(g); g.connect(a.destination);
+      src.start(startT); src.stop(startT+0.25);
+    }
+  } catch(e){}
+}
+
+function soundWin(m) {
+  if      (m>=100) soundJackpot();
+  else if (m>=25)  soundBigWin();
+  else if (m>=8)   soundMedWin();
+  else             soundSmallWin();
+}
+function soundLose()   { tone(220,'sawtooth',.15,.14); tone(165,'sawtooth',.18,.10,.12); }
+function soundCashIn() { [523,659,784,1047].forEach((f,i)=>tone(f,'sine',.12,.28,i*.08)); }
+function soundCashOut(){
+  for(let i=0;i<16;i++){const f=400+i*55;const gap=Math.max(i*.055*(1-i*.002),0);tone(f,'sine',.1,.28,gap);}
+  [523,659,784].forEach((f,i)=>tone(f,'sine',.35,.3,.85+i*.03));
+}
+
+// ═══════════════════════════════════════
+//  BET BUTTONS
+// ═══════════════════════════════════════
+document.getElementById('drow').addEventListener('click',e=>{
+  const btn=e.target.closest('.dbtn');
+  if(!btn||spinning) return;
+  tone(440,'square',.05,.2); bet=parseInt(btn.dataset.b);
+  document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); updateUI();
+});
+
+// ═══════════════════════════════════════
+//  MARQUEE BULBS
+// ═══════════════════════════════════════
+(function(){
+  const bl=document.getElementById('bulbs');
+  for(let i=0;i<18;i++){const b=document.createElement('div');b.className='bulb';b.style.animationDelay=(i*.07)+'s';bl.appendChild(b);}
+})();
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+window.addEventListener('resize',()=>{ buildReels(); updateUI(); });
+buildReels();
+updateUI();
+updateBennyDisplay();
+renderLog();
+// Start BENNY teaser chime loop
+startBennyTeaser();
+</script>
+</body>
+</html>
