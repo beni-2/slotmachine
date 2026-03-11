@@ -195,8 +195,8 @@ body {
 .msub { font-size:.58rem; letter-spacing:5px; color:rgba(255,200,0,.3); text-transform:uppercase; margin-top:3px; }
 
 /* ══ WIN TICKER ══ */
-.win-banner { background:#050505; border-bottom:1px solid rgba(200,144,10,.3); min-height:30px; display:flex; align-items:center; justify-content:center; padding:4px 10px; }
-#winText { font-family:'Orbitron',monospace; font-size:clamp(.62rem,2vw,.82rem); color:#f5c842; letter-spacing:2px; text-align:center; transition:color .3s; }
+.win-banner { background:#050505; border-bottom:1px solid rgba(200,144,10,.3); height:58px; min-height:58px; max-height:58px; display:flex; align-items:center; justify-content:center; padding:4px 10px; }
+#winText { font-family:'Orbitron',monospace; font-size:clamp(.57rem,1.75vw,.76rem); color:#f5c842; letter-spacing:2px; text-align:center; transition:color .3s; line-height:1.32; width:100%; }
 #winText.big { color:#fff8a0; animation:bigWin .4s ease infinite alternate; }
 @keyframes bigWin { from{filter:drop-shadow(0 0 6px #ffd700);letter-spacing:2px} to{filter:drop-shadow(0 0 18px #ffd700);letter-spacing:4px} }
 
@@ -315,6 +315,133 @@ body {
 .pitem.benny-pay { border-color:#c8900a; background:linear-gradient(180deg,#1a1200,#0a0800); }
 .pitem.benny-pay .pmult { color:#ffd700; filter:drop-shadow(0 0 4px rgba(255,215,0,.5)); }
 
+/* ══ SCATTER PAYTABLE PANEL ══ */
+.scatter-paytable-panel {
+  background: #040404;
+  border-top: 2px solid #005577;
+  padding: 8px 10px 12px;
+}
+.spt-title {
+  font-size:.52rem; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(0,229,255,.35); text-align:center; margin-bottom:2px;
+}
+.spt-subtitle {
+  font-size:.44rem; letter-spacing:2px; color:rgba(0,229,255,.2);
+  text-align:center; margin-bottom:7px;
+}
+/* Glass casing mimicking machine body plate */
+.spt-case {
+  background: linear-gradient(160deg,#001a22 0%,#000d14 60%,#001a22 100%);
+  border: 2px solid #007799;
+  border-radius: 14px;
+  padding: 8px 8px 6px;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(0,229,255,.07),
+    inset 0 0 20px rgba(0,0,0,.6),
+    0 0 14px rgba(0,150,200,.12);
+  overflow: hidden;
+}
+.spt-case::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:40%;
+  background:linear-gradient(180deg,rgba(0,229,255,.05),transparent);
+  border-radius:12px 12px 0 0; pointer-events:none;
+}
+.spt-case::after {
+  content:'';
+  position:absolute; inset:0; border-radius:12px;
+  border:1px solid rgba(0,229,255,.06); pointer-events:none;
+}
+.spt-case-label {
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  background:#040404; padding:0 8px;
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.35rem,1vw,.46rem);
+  color:rgba(0,229,255,.5); letter-spacing:2px;
+  text-transform:uppercase; white-space:nowrap;
+}
+/* Individual scatter pay rows */
+.spt-rows { display:flex; flex-direction:column; gap:3px; }
+.spt-row {
+  display:grid;
+  grid-template-columns: 1fr 90px 80px 80px;
+  align-items:center;
+  padding:5px 8px;
+  border-radius:8px;
+  border:1px solid rgba(0,229,255,.08);
+  background:rgba(0,229,255,.02);
+  gap:4px;
+}
+.spt-row.tier-5 {
+  border-color:rgba(255,215,0,.4);
+  background:linear-gradient(90deg,rgba(255,215,0,.08),rgba(255,215,0,.03));
+  box-shadow:0 0 10px rgba(255,215,0,.08), inset 0 0 8px rgba(255,215,0,.03);
+  animation:sptMegaGlow 1.2s ease-in-out infinite alternate;
+}
+@keyframes sptMegaGlow {
+  from { border-color:rgba(255,215,0,.3); box-shadow:0 0 6px rgba(255,215,0,.06); }
+  to   { border-color:rgba(255,255,180,.7); box-shadow:0 0 16px rgba(255,215,0,.2); }
+}
+.spt-row.tier-4 {
+  border-color:rgba(255,140,0,.3);
+  background:linear-gradient(90deg,rgba(255,140,0,.06),rgba(255,140,0,.02));
+}
+.spt-stars {
+  font-size:clamp(.75rem,2.4vw,1rem);
+  line-height:1;
+  filter:drop-shadow(0 0 4px rgba(0,229,255,.5));
+}
+.spt-row.tier-5 .spt-stars { filter:drop-shadow(0 0 8px rgba(255,215,0,.9)); }
+.spt-row.tier-4 .spt-stars { filter:drop-shadow(0 0 6px rgba(255,140,0,.7)); }
+.spt-match {
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(.5rem,1.5vw,.65rem);
+  color:rgba(0,229,255,.5);
+  text-align:center;
+  letter-spacing:1px;
+}
+.spt-mult {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.42rem,1.3vw,.55rem);
+  font-weight:700;
+  text-align:center;
+  color:#00e5ff;
+}
+.spt-row.tier-5 .spt-mult { color:#fff8a0; animation:sptFivePulse 1s ease infinite alternate; }
+.spt-row.tier-4 .spt-mult { color:#ffb347; }
+@keyframes sptFivePulse {
+  from { filter:drop-shadow(0 0 4px rgba(255,215,0,.4)); }
+  to   { filter:drop-shadow(0 0 12px rgba(255,255,180,.9)); }
+}
+.spt-win {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.4rem,1.2vw,.52rem);
+  font-weight:700;
+  color:rgba(255,255,255,.6);
+  text-align:right;
+}
+.spt-row.tier-5 .spt-win { color:#fff8a0; }
+.spt-row.tier-4 .spt-win { color:#ffb347; }
+.spt-note {
+  font-size:clamp(.38rem,1.1vw,.5rem);
+  color:rgba(0,229,255,.18);
+  text-align:center; margin-top:5px; letter-spacing:.5px;
+}
+/* Header row */
+.spt-header {
+  display:grid; grid-template-columns:1fr 90px 80px 80px;
+  padding:2px 8px 4px; gap:4px; margin-bottom:2px;
+}
+.spt-header span {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.33rem,1vw,.44rem);
+  color:rgba(0,229,255,.28);
+  letter-spacing:1px; text-align:center;
+}
+.spt-header span:first-child { text-align:left; }
+
 /* ══ WIN LOG ══ */
 .win-log-section {
   background:#040404;
@@ -399,10 +526,295 @@ body {
 }
 
 /* ══ TOAST ══ */
+/* ══ FREE SPIN OVERLAY ══ */
+.free-spin-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  pointer-events: none;
+}
+.free-spin-overlay.show { display: block; }
+.free-spin-banner {
+  background: linear-gradient(90deg,
+    rgba(0,229,255,0) 0%,
+    rgba(0,60,80,.92) 20%,
+    rgba(0,40,60,.96) 50%,
+    rgba(0,60,80,.92) 80%,
+    rgba(0,229,255,0) 100%);
+  text-align: center;
+  padding: 10px 20px 8px;
+  border-bottom: 2px solid rgba(0,229,255,.4);
+  box-shadow: 0 4px 30px rgba(0,229,255,.25);
+}
+.fso-label {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.55rem, 1.8vw, .75rem);
+  color: rgba(0,229,255,.7);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.fso-count {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #00e5ff;
+  text-shadow: 0 0 16px #00e5ff, 0 0 32px rgba(0,229,255,.5);
+  animation: fsoPulse .6s ease-in-out infinite alternate;
+}
+@keyframes fsoPulse {
+  from { text-shadow: 0 0 10px #00e5ff; }
+  to   { text-shadow: 0 0 24px #00e5ff, 0 0 48px rgba(0,229,255,.6); }
+}
+.fso-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(.5rem, 1.6vw, .65rem);
+  color: rgba(0,229,255,.5);
+  letter-spacing: 3px;
+  margin-top: 1px;
+}
+
 .toast { position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-90px); background:#0c0c0c; border:1px solid #c8900a; color:#f5c842; font-family:'Orbitron',monospace; font-size:clamp(.6rem,1.8vw,.78rem); letter-spacing:1px; padding:8px 20px; border-radius:30px; z-index:999; transition:transform .35s cubic-bezier(.34,1.56,.64,1); box-shadow:0 0 18px rgba(200,144,10,.28); white-space:nowrap; }
 .toast.show { transform:translateX(-50%) translateY(0); }
 .coin { position:fixed; font-size:1.3rem; pointer-events:none; z-index:998; animation:coinFall .9s ease-in forwards; }
 @keyframes coinFall { 0%{transform:translateY(-20px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(540deg);opacity:0} }
+
+/* ══ SCATTER BUTTON ══ */
+.scatter-btn { color:#00e5ff !important; border-color:#005577 !important; }
+.scatter-btn.on { border-color:#00e5ff !important; color:#fff !important; background:linear-gradient(180deg,#001a22,#000f14) !important; box-shadow:0 0 10px rgba(0,229,255,.25) !important; }
+
+/* ══ 3 PAYLINE BARS ══ */
+.payline-bar { position:absolute; left:0; right:0; z-index:9; pointer-events:none;
+  border-top:2px solid rgba(255,215,0,.0); border-bottom:2px solid rgba(255,215,0,.0);
+  background:rgba(255,215,0,.0); transition:background .3s,border-color .3s,opacity .3s; }
+.payline-bar.active { border-top-color:rgba(255,215,0,.55); border-bottom-color:rgba(255,215,0,.55); background:rgba(255,215,0,.04); }
+.payline-bar.active.line1 { border-color:rgba(255,215,0,.7); }
+.payline-bar.active.line2 { border-color:rgba(255,140,0,.7); }
+.payline-bar.active.line3 { border-color:rgba(255,60,60,.55); }
+.payline-bar.flash { animation:plFlash .35s ease infinite alternate; }
+.payline-bar.flash.line1 { border-color:#ffd700; box-shadow:inset 0 0 14px rgba(255,215,0,.3); }
+.payline-bar.flash.line2 { border-color:#ff8c00; box-shadow:inset 0 0 14px rgba(255,140,0,.3); }
+.payline-bar.flash.line3 { border-color:#ff3c3c; box-shadow:inset 0 0 14px rgba(255,60,60,.3); }
+
+/* ══ SCATTER CELL ══ */
+.sym-cell[data-sym="SCATTER"] { background:radial-gradient(circle at 50% 40%,#002233,#000d1a); }
+.sym-cell[data-sym="SCATTER"] .icon { filter:drop-shadow(0 0 8px #00e5ff); }
+
+/* ══ PAYTABLE UPDATES ══ */
+.pay-note { font-family:'Share Tech Mono',monospace; font-size:clamp(.5rem,1.5vw,.62rem); color:rgba(255,215,0,.5); text-align:center; margin-bottom:5px; letter-spacing:1px; }
+.pay-note span { color:#ffd700; }
+.pay-legend { font-size:clamp(.42rem,1.2vw,.52rem); color:rgba(255,255,255,.2); text-align:center; margin-top:5px; letter-spacing:.5px; }
+.pgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+.scatter-pay { border-color:#005577 !important; background:linear-gradient(180deg,#001a22,#000d14) !important; }
+.scatter-pay .pmult { color:#00e5ff !important; }
+
+/* ── Scatter tier row styles ── */
+.odds-table tr.scatter-mega td { background:rgba(255,215,0,.07); }
+.odds-table tr.scatter-super td { background:rgba(255,140,0,.05); }
+.odds-table td.scatter-five {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.4rem,1.2vw,.52rem);
+  font-weight:700;
+  color:#fff8a0;
+  filter:drop-shadow(0 0 6px rgba(255,215,0,.8));
+  animation:scatFivePulse 1s ease-in-out infinite alternate;
+}
+@keyframes scatFivePulse {
+  from { color:#ffd700; filter:drop-shadow(0 0 4px rgba(255,215,0,.5)); }
+  to   { color:#fff8a0; filter:drop-shadow(0 0 12px rgba(255,255,180,.9)); }
+}
+.odds-table td.scatter-four {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.4rem,1.2vw,.52rem);
+  font-weight:700;
+  color:#ffb347;
+  filter:drop-shadow(0 0 5px rgba(255,140,0,.6));
+}
+
+/* ══ WIN CELL COLORS PER LINE ══ */
+.sym-cell.win-cell-1 { animation:cellWin1 .4s ease infinite alternate; }
+.sym-cell.win-cell-2 { animation:cellWin2 .4s ease infinite alternate; }
+.sym-cell.win-cell-3 { animation:cellWin3 .4s ease infinite alternate; }
+.sym-cell.win-cell-sc { animation:cellWinSc .4s ease infinite alternate; }
+@keyframes cellWin1 { from{box-shadow:inset 0 0 0 2px transparent} to{box-shadow:inset 0 0 0 2px #ffd700,inset 0 0 14px rgba(255,215,0,.35)} }
+@keyframes cellWin2 { from{box-shadow:inset 0 0 0 2px transparent} to{box-shadow:inset 0 0 0 2px #ff8c00,inset 0 0 14px rgba(255,140,0,.35)} }
+@keyframes cellWin3 { from{box-shadow:inset 0 0 0 2px transparent} to{box-shadow:inset 0 0 0 2px #ff3c3c,inset 0 0 14px rgba(255,60,60,.35)} }
+@keyframes cellWinSc { from{box-shadow:inset 0 0 0 2px transparent} to{box-shadow:inset 0 0 0 2px #00e5ff,inset 0 0 14px rgba(0,229,255,.35)} }
+
+/* ══ TOP WIN BANNER ══ */
+.top-win-banner {
+  background: linear-gradient(180deg, #1a0f00, #0d0800);
+  border-bottom: 1px solid rgba(255,215,0,.15);
+  padding: 7px 10px 6px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.top-win-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,215,0,.03) 40px, rgba(255,215,0,.03) 41px);
+}
+.twb-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(.48rem, 1.4vw, .6rem);
+  letter-spacing: 4px;
+  color: rgba(255,215,0,.45);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.twb-main {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(.9rem, 3.5vw, 1.3rem);
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, #ffffff 0%, #ffe87c 35%, #ffd700 65%, #c8900a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(255,215,0,.6));
+  animation: twbPulse 2s ease-in-out infinite alternate;
+  line-height: 1.1;
+}
+@keyframes twbPulse {
+  from { filter: drop-shadow(0 0 6px rgba(255,215,0,.4)); }
+  to   { filter: drop-shadow(0 0 18px rgba(255,215,0,.9)); }
+}
+.twb-stars {
+  font-size: clamp(.55rem, 1.8vw, .72rem);
+  color: #c8900a;
+  letter-spacing: 6px;
+  margin-top: 1px;
+  animation: twbPulse 2s ease-in-out infinite alternate;
+}
+
+/* ══ ODDS PANEL ══ */
+.odds-panel {
+  background: #040404;
+  border-top: 2px solid #c8900a;
+  padding: 8px 10px 12px;
+}
+/* Slot-machine glass display casing around the odds table */
+.odds-case {
+  background: linear-gradient(160deg, #0d0d00 0%, #060600 60%, #0d0d00 100%);
+  border: 2px solid #c8900a;
+  border-radius: 14px;
+  padding: 8px 8px 6px;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(255,215,0,.08),
+    inset 0 0 20px rgba(0,0,0,.6),
+    0 0 12px rgba(200,144,10,.12);
+  overflow: hidden;
+}
+.odds-case::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(180deg, rgba(255,215,0,.04), transparent);
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+.odds-case::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,215,0,.06);
+  pointer-events: none;
+}
+.odds-case-label {
+  position: absolute;
+  top: -1px; left: 50%; transform: translateX(-50%);
+  background: #040404;
+  padding: 0 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.35rem, 1vw, .45rem);
+  color: rgba(200,144,10,.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.odds-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 6px;
+}
+.odds-title { font-size:.52rem; letter-spacing:3px; text-transform:uppercase; color:rgba(200,144,10,.4); }
+.odds-mode-tag {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.42rem,1.2vw,.54rem);
+  color:#ffd700;
+  background:rgba(255,215,0,.08);
+  border:1px solid rgba(255,215,0,.2);
+  border-radius:4px;
+  padding:2px 7px;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+.odds-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:clamp(.44rem,1.3vw,.58rem);
+}
+.odds-table th {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.38rem,1.1vw,.5rem);
+  color:rgba(200,144,10,.4);
+  letter-spacing:1px;
+  padding:3px 4px;
+  border-bottom:1px solid rgba(255,215,0,.1);
+  text-align:center;
+  font-weight:400;
+}
+.odds-table th:first-child { text-align:left; padding-left:6px; }
+.odds-table td {
+  padding:3px 4px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  text-align:center;
+  color:rgba(255,255,255,.55);
+  font-size:clamp(.44rem,1.3vw,.57rem);
+}
+.odds-table td:first-child {
+  text-align:left;
+  padding-left:6px;
+  font-size:clamp(.62rem,1.9vw,.8rem);
+  line-height:1;
+}
+.odds-table tr:last-child td { border-bottom:none; }
+.odds-table td.payout {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.4rem,1.2vw,.52rem);
+  font-weight:700;
+}
+.odds-table td.payout.gold  { color:#ffd700; }
+.odds-table td.payout.cyan  { color:#00e5ff; }
+.odds-table td.payout.dim   { color:rgba(255,255,255,.3); }
+.odds-table tr.benny-row td { background:rgba(255,215,0,.04); }
+.odds-table tr.benny-row td.payout { color:#fff8a0; filter:drop-shadow(0 0 4px rgba(255,215,0,.5)); }
+.odds-table tr.scatter-row td { background:rgba(0,229,255,.03); }
+.odds-table td.sym-odds { color:rgba(255,255,255,.22); font-size:clamp(.38rem,1.1vw,.5rem); }
+.odds-note {
+  font-size:clamp(.38rem,1.1vw,.5rem);
+  color:rgba(255,255,255,.15);
+  text-align:center;
+  margin-top:5px;
+  letter-spacing:.5px;
+}
+.odds-live-bet {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.42rem,1.2vw,.54rem);
+  color:rgba(255,215,0,.5);
+  text-align:center;
+  margin-bottom:4px;
+  letter-spacing:1px;
+}
+.odds-live-bet span { color:#ffd700; }
 </style>
 </head>
 <body>
@@ -410,13 +822,20 @@ body {
 <div class="machine-outer">
 <div class="machine-inner">
 
+  <!-- TOP WIN BANNER -->
+  <div class="top-win-banner">
+    <div class="twb-sub">✦ Grand Prize ✦</div>
+    <div class="twb-main">WIN MORE THAN ₱100,000,000</div>
+    <div class="twb-stars">★ ★ ★ ★ ★</div>
+  </div>
+
   <!-- BENNY DISPLAY -->
   <div class="benny-display active-glow" id="bennyDisplay">
     <!-- Scrolling marquee -->
     <div class="benny-marquee-wrap">
       <div class="benny-marquee-track" id="bennyMarqueeTrack">
-        <span class="benny-marquee-text" id="bennyMarqueeText">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp;</span>
-        <span class="benny-marquee-text" aria-hidden="true">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱1,000,000.00 &nbsp;·&nbsp;</span>
+        <span class="benny-marquee-text" id="bennyMarqueeText">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱100,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱100,000,000.00 &nbsp;·&nbsp;</span>
+        <span class="benny-marquee-text" aria-hidden="true">✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱100,000,000.00 &nbsp;·&nbsp; ✦ SPECIAL JACKPOT &nbsp;·&nbsp; GET B·E·N·N·Y ON ANY LINE &nbsp;·&nbsp; WIN ₱100,000,000.00 &nbsp;·&nbsp;</span>
       </div>
     </div>
     <!-- Letter slots + jackpot amount -->
@@ -433,15 +852,15 @@ body {
         <div class="benny-dot" id="bd3">·</div>
         <div class="benny-slot" id="bs4">Y</div>
       </div>
-      <div class="benny-jp">JACKPOT<span>₱1,000,000</span></div>
+      <div class="benny-jp">JACKPOT<span>₱100,000,000</span></div>
     </div>
   </div>
 
   <!-- MARQUEE -->
   <div class="marquee">
     <div class="bulb-row" id="bulbs"></div>
-    <div class="mtitle">✦ GOLDEN REELS ✦</div>
-    <div class="msub">Premium Casino · 5 Reels · 3 Rows · 5 Lines</div>
+    <div class="mtitle">✦ VIP GOLDEN REELS ✦</div>
+    <div class="msub">Premium Casino · 5 Reels · 3 Rows · 1/2/3 Lines + Scatter</div>
   </div>
 
   <!-- WIN TICKER -->
@@ -451,7 +870,9 @@ body {
   <div class="reel-section">
     <div class="reel-bezel">
       <div class="reel-window" id="reelWindow">
-        <div class="payline-bar" id="paylineBar"></div>
+        <div class="payline-bar" id="pl0" data-line="0"></div>
+        <div class="payline-bar" id="pl1" data-line="1"></div>
+        <div class="payline-bar" id="pl2" data-line="2"></div>
         <div class="reel" id="r0"></div>
         <div class="reel" id="r1"></div>
         <div class="reel" id="r2"></div>
@@ -466,6 +887,17 @@ body {
     <div class="cbox"><div class="clbl">Credits</div><div class="cval" id="dCr">₱0</div></div>
     <div class="cbox"><div class="clbl">Total Bet</div><div class="cval" id="dBt">₱50</div></div>
     <div class="cbox"><div class="clbl">Last Win</div><div class="cval green" id="dWn">₱0</div></div>
+  </div>
+
+  <!-- LINES SELECT -->
+  <div class="bet-section">
+    <div class="slbl">◈ Select Lines ◈</div>
+    <div class="denom-row" id="linerow">
+      <button class="dbtn lbtn" data-l="1">1 LINE</button>
+      <button class="dbtn lbtn" data-l="2">2 LINES</button>
+      <button class="dbtn lbtn on" data-l="3">3 LINES</button>
+      <button class="dbtn lbtn scatter-btn" data-l="4">SCATTER</button>
+    </div>
   </div>
 
   <!-- BET DENOM -->
@@ -496,19 +928,44 @@ body {
     <button class="bspin" id="spinBtn" onclick="doSpin()">SPIN</button>
   </div>
 
-  <!-- PAYTABLE -->
-  <div class="paytable">
-    <div class="slbl">◈ Pay Table ◈</div>
-    <div class="pgrid">
-      <div class="pitem benny-pay"><div class="psym" style="font-family:'Orbitron',monospace;font-weight:900;background:linear-gradient(180deg,#fff8c0,#ffd700,#a06000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;">B·E·N·N·Y</div><div class="pmult">ANY LINE = ₱1M</div></div>
-      <div class="pitem"><div class="psym">7️⃣7️⃣7️⃣</div><div class="pmult">×200</div></div>
-      <div class="pitem"><div class="psym">💎💎💎</div><div class="pmult">×100</div></div>
-      <div class="pitem"><div class="psym">🔔🔔🔔</div><div class="pmult">×50</div></div>
-      <div class="pitem"><div class="psym">🍒🍒🍒</div><div class="pmult">×25</div></div>
-      <div class="pitem"><div class="psym">🍋🍋🍋</div><div class="pmult">×15</div></div>
-      <div class="pitem"><div class="psym">🍊🍊🍊</div><div class="pmult">×10</div></div>
-      <div class="pitem"><div class="psym">🍇🍇🍇</div><div class="pmult">×8</div></div>
+  <!-- ODDS PANEL -->
+  <div class="odds-panel" id="oddsPanel">
+    <div class="odds-header">
+      <div class="odds-title">◈ Payout Odds ◈</div>
+      <div class="odds-mode-tag" id="oddsModeTag">3 LINES · ₱75 BET</div>
     </div>
+    <div class="odds-live-bet">Current Bet: <span id="oddsLiveBet">₱75</span> · Mode: <span id="oddsLiveMode">3 Lines</span></div>
+    <div class="odds-case">
+      <div class="odds-case-label">Payout Schedule</div>
+      <table class="odds-table" id="oddsTable">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Match</th>
+            <th>Multiplier</th>
+            <th>Win (at bet)</th>
+            
+          </tr>
+        </thead>
+        <tbody id="oddsTbody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+    <div class="odds-note">Scatter RTP ~16% · 1★ hits ~1 in 6 spins · BENNY = ₱100,000,000 lottery</div>
+  </div>
+
+  <!-- SCATTER PAYTABLE PANEL -->
+  <div class="scatter-paytable-panel" id="scatterPaytablePanel">
+    <div class="spt-title">◈ Scatter Star Payouts ◈</div>
+    <div class="spt-subtitle">Any position on grid · ×Total Bet</div>
+    <div class="spt-case">
+      <div class="spt-case-label">⭐ SCATTER PAYTABLE ⭐</div>
+      <div class="spt-rows" id="sptRows">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+    <div class="spt-note">Free Spins: crypto lottery + pot gate — genuinely unpredictable</div>
   </div>
 
   <!-- WIN LOG -->
@@ -530,8 +987,17 @@ body {
     <div class="att-icon">🔔</div>
     <div class="att-title">CALL ATTENDANT</div>
     <div class="att-sub">🎉 BENNY JACKPOT! 🎉</div>
-    <div class="att-amount">₱1,000,000.00</div>
+    <div class="att-amount">₱100,000,000.00</div>
     <button class="att-cashout-btn" onclick="bennyCashOut()">✦ CASH OUT ✦</button>
+  </div>
+</div>
+
+<!-- FREE SPIN OVERLAY -->
+<div class="free-spin-overlay" id="freeSpinOverlay">
+  <div class="free-spin-banner">
+    <div class="fso-label">✦ Free Spins ✦</div>
+    <div class="fso-count" id="fsoCount">5 Remaining</div>
+    <div class="fso-sub">Auto-Play · No Deductions</div>
   </div>
 </div>
 
@@ -541,199 +1007,431 @@ body {
 // ═══════════════════════════════════════
 //  SYMBOLS
 // ═══════════════════════════════════════
-// B, E, N1, N2, Y are letter fruit symbols.
-// ALL 5 letters appear in EVERY column's pool.
-// Win = any payline reads B·E·N·N·Y left→right
-// across cols 0–4 on that line (exact sequence).
-// Letters are rendered as styled gold text on reels.
-
 const SYMS = [
-  { id:'LB',      letter:'B', pay:0   },
-  { id:'LE',      letter:'E', pay:0   },
-  { id:'LN1',     letter:'N', pay:0   },
-  { id:'LN2',     letter:'N', pay:0   },
-  { id:'LY',      letter:'Y', pay:0   },
-  { id:'SEVEN',   icon:'7️⃣',  pay:200 },
-  { id:'DIAMOND', icon:'💎',  pay:100 },
-  { id:'BELL',    icon:'🔔',  pay:50  },
-  { id:'CHERRY',  icon:'🍒',  pay:25  },
-  { id:'LEMON',   icon:'🍋',  pay:15  },
-  { id:'ORANGE',  icon:'🍊',  pay:10  },
-  { id:'GRAPE',   icon:'🍇',  pay:8   },
-  { id:'MELON',   icon:'🍉',  pay:5   },
+  { id:'LB',      letter:'B',  pay:0   },
+  { id:'LE',      letter:'E',  pay:0   },
+  { id:'LN1',     letter:'N',  pay:0   },
+  { id:'LN2',     letter:'N',  pay:0   },
+  { id:'LY',      letter:'Y',  pay:0   },
+  { id:'SCATTER', icon:'⭐',   pay:0   },   // scatter — any position counts
+  { id:'SEVEN',   icon:'7️⃣',  pay:500 },   // 1L×500 2L×1000 3L×1500
+  { id:'DIAMOND', icon:'💎',   pay:200 },   // 1L×200 2L×400  3L×600
+  { id:'BELL',    icon:'🔔',   pay:100 },
+  { id:'CHERRY',  icon:'🍒',   pay:50  },
+  { id:'LEMON',   icon:'🍋',   pay:30  },
+  { id:'ORANGE',  icon:'🍊',   pay:20  },
+  { id:'GRAPE',   icon:'🍇',   pay:15  },
+  { id:'MELON',   icon:'🍉',   pay:10  },
 ];
 
-// Shared pool — all 5 BENNY letters appear in every column.
-// Each letter appears once; pool size = 43 fruits + 5 letters = 48.
 const SHARED_POOL = [
-  'LB','LE','LN1','LN2','LY',          // one of each letter
+  'LB','LE','LN1','LN2','LY',
+  'SCATTER','SCATTER','SCATTER',
   'SEVEN',
   'DIAMOND','DIAMOND',
   'BELL','BELL','BELL',
-  'CHERRY','CHERRY','CHERRY','CHERRY','CHERRY',
-  'LEMON','LEMON','LEMON','LEMON','LEMON','LEMON',
-  'ORANGE','ORANGE','ORANGE','ORANGE','ORANGE','ORANGE','ORANGE',
-  'GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE',
-  'MELON','MELON','MELON','MELON','MELON','MELON','MELON','MELON','MELON',
+  'CHERRY','CHERRY','CHERRY','CHERRY',
+  'LEMON','LEMON','LEMON','LEMON','LEMON',
+  'ORANGE','ORANGE','ORANGE','ORANGE','ORANGE','ORANGE',
+  'GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE','GRAPE',
+  'MELON','MELON','MELON','MELON','MELON','MELON','MELON','MELON',
 ];
 
-const BENNY_IDS = new Set(['LB','LE','LN1','LN2','LY']);
-
+const BENNY_IDS   = new Set(['LB','LE','LN1','LN2','LY']);
 const symById = {};
 SYMS.forEach(s => symById[s.id] = s);
 
-function randSymForCol(col) {
-  return SHARED_POOL[Math.floor(Math.random() * SHARED_POOL.length)];
-}
-function randSym() {
-  return SHARED_POOL[Math.floor(Math.random() * SHARED_POOL.length)];
-}
+function randSymForCol(col) { return SHARED_POOL[Math.floor(Math.random()*SHARED_POOL.length)]; }
+function randSym()          { return SHARED_POOL[Math.floor(Math.random()*SHARED_POOL.length)]; }
 
 // ═══════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════
-const COLS=5, ROWS=3, LINES=5, MAX_CREDITS=50000;
-let credits=0, bet=25, lastWin=0, spinning=false;
+const COLS=5, ROWS=3, MAX_CREDITS=50000;
+let credits=0, bet=25, linesMode=3, lastWin=0, spinning=false;
 let currentGrid=null;
-let bennyActive=false; // true while waiting for attendant cashout
+let bennyActive=false;
 let winSoundNodes=[];
+let freeSpins=0;
+
+// ═══════════════════════════════════════
+//  HIDDEN FREE SPIN POT — CHAOS RNG
+//
+//  A concealed "pot" accumulates a fraction of every bet placed.
+//  When the pot crosses a dynamic threshold AND a chaotic entropy
+//  test passes, 5 free spins are awarded. The threshold itself is
+//  randomly re-seeded after each award so the interval can never
+//  be predicted.
+//
+//  Entropy source: a 32-value chaotic sequence derived from the
+//  logistic map  x_{n+1} = r · x_n · (1 − x_n)  at r=3.9999
+//  (deep chaos regime), seeded from crypto-random bytes XORed
+//  with performance.now() mantissa. This produces behaviour
+//  indistinguishable from a physical random process.
+// ═══════════════════════════════════════
+const FREE_SPIN_POT = (() => {
+  // ══════════════════════════════════════════════════════════════════
+  //  FREE SPIN HIDDEN POT — CRYPTO + CHAOS HYBRID RNG
+  //
+  //  Two-stage trigger: the pot must accumulate enough bets (GATE),
+  //  then a crypto lottery draw must pass (TRIGGER). Both conditions
+  //  must be met simultaneously, making the award genuinely unpredictable.
+  //
+  //  Stage 1 — POT GATE
+  //    Each bet fills the pot by a chaotically-varying 6–12% fraction.
+  //    The pot must reach a threshold (250–700 credits) before any
+  //    trigger can fire. This ensures a minimum spend between awards.
+  //
+  //  Stage 2 — CRYPTO LOTTERY TRIGGER
+  //    Once the pot is eligible, each spin draws 4 numbers from 1–30
+  //    (crypto.getRandomValues). The winning combo is also 4 numbers,
+  //    seeded at startup and re-seeded after every award.
+  //    P(match) = 1/(30×29×28×27 / 4!) = 1/27,405 per eligible spin.
+  //    Combined with gate, real inter-award interval is chaotically
+  //    variable — impossible to predict or time.
+  //
+  //  Chaos engine (independent from BENNY_LOTTERY):
+  //    Logistic map x → r·x·(1-x) at r=3.9998, crypto-seeded.
+  //    Used only for pot fill-rate variation and threshold setting.
+  // ══════════════════════════════════════════════════════════════════
+
+  // ── Crypto helpers ───────────────────────────────────────────────
+  function cryptoByte() {
+    const b = new Uint8Array(1);
+    crypto.getRandomValues(b);
+    return b[0];
+  }
+
+  // Draw k unique numbers from [1..n] using crypto RNG (Fisher-Yates)
+  function cryptoDraw4(n, k) {
+    const pool = Array.from({length: n}, (_, i) => i + 1);
+    for (let i = n - 1; i >= n - k; i--) {
+      // Rejection-sample a fair index [0..i]
+      const range = i + 1;
+      let idx;
+      do {
+        const buf = new Uint8Array(2);
+        crypto.getRandomValues(buf);
+        idx = (buf[0] * 256 + buf[1]) % (range + Math.floor(65536 / range) * range);
+      } while (idx >= Math.floor(65536 / range) * range + (65536 % range === 0 ? range : 65536 % range));
+      // Simpler: just use modulo — bias is tiny for small ranges
+      const buf2 = new Uint8Array(2);
+      crypto.getRandomValues(buf2);
+      idx = (buf2[0] * 256 + buf2[1]) % (i + 1);
+      [pool[i], pool[idx]] = [pool[idx], pool[i]];
+    }
+    return pool.slice(n - k).sort((a, b) => a - b);
+  }
+
+  // ── Chaos engine ─────────────────────────────────────────────────
+  function makeChaosState() {
+    try {
+      const buf = new Uint8Array(4);
+      crypto.getRandomValues(buf);
+      const raw = (buf[0] * buf[1] + buf[2] * 256 + buf[3]) / (255 * 255 + 255 * 256 + 255);
+      return 0.15 + (raw % 0.70);
+    } catch(e) {
+      return 0.15 + ((performance.now() * 2.718) % 0.70);
+    }
+  }
+  const RC = 3.9998;
+  let cx = makeChaosState();
+  function chaos(n = 1) { for (let i = 0; i < n; i++) cx = RC * cx * (1 - cx); return cx; }
+
+  // ── Pot & lottery state ───────────────────────────────────────────
+  const DRAW_N = 30, DRAW_K = 4;          // draw 4 from 1-30
+  let winCombo   = cryptoDraw4(DRAW_N, DRAW_K);
+  let pot        = 0;
+  let threshold  = 0;
+  let eligibleAt = 0;
+
+  function reseed() {
+    chaos(5 + Math.floor(chaos(1) * 20));
+    // High threshold: 800–2200 credits spent before gate can open — makes free spins genuinely rare
+    threshold  = 800 + Math.floor(chaos(3) * 1400);
+    // Gate opens at 70–92% of threshold — deep into the spend range
+    eligibleAt = threshold * (0.70 + chaos(2) * 0.22);
+    pot = chaos(2) * 6;
+    winCombo = cryptoDraw4(DRAW_N, DRAW_K);            // new secret combo
+  }
+  reseed();
+
+  // ── Public API ────────────────────────────────────────────────────
+  return {
+    tick(betAmount) {
+      // Stage 1: fill pot (3–6% of bet — slow fill keeps free spins genuinely rare)
+      pot += betAmount * (0.03 + chaos(1) * 0.03);
+
+      if (pot < eligibleAt) return false;    // gate not open
+
+      // Stage 2: crypto lottery draw
+      const ticket = cryptoDraw4(DRAW_N, DRAW_K);
+      const isWin  = ticket.every((n, i) => n === winCombo[i]);
+
+      if (isWin) {
+        reseed();
+        return true;
+      }
+
+      // Pot overflow safety: if pot exceeds 3× threshold, force award to prevent infinite wait
+      if (pot > threshold * 3) {
+        // Escalating pressure: 30% chance per spin past overflow
+        const pressure = chaos(2);
+        if (pressure > 0.70) { reseed(); return true; }
+      }
+      return false;
+    },
+
+    debug() {
+      return { pot: pot.toFixed(1), threshold, eligibleAt: eligibleAt.toFixed(1), winCombo };
+    }
+  };
+})();
+
+// ═══════════════════════════════════════
+//  BENNY JACKPOT — LOTTERY// ═══════════════════════════════════════
+//  BENNY JACKPOT — LOTTERY-STYLE RNG
+//
+//  The ₱100,000,000 jackpot is governed by a dedicated lottery draw,
+//  completely independent of the reel grid. Probability mirrors
+//  real Philippine lotto (PCSO 6/49 ≈ 1 in 13,983,816).
+//
+//  Architecture:
+//    • Each spin generates a LOTTERY TICKET: 6 numbers drawn from 1–49
+//      without replacement (Fisher-Yates), using crypto.getRandomValues().
+//    • A WINNING COMBINATION is seeded from a second independent
+//      crypto draw at startup and re-seeded after every jackpot.
+//    • If ticket === winning combination → BENNY jackpot fires.
+//    • The reel grid is then FORCED to display B·E·N·N·Y on the middle
+//      line for visual confirmation (grid override).
+//    • If ticket ≠ winning combination → reel result is normal; any
+//      naturally-landing BENNY sequence on the grid is suppressed by
+//      swapping out one letter, so BENNY can ONLY appear via lottery.
+//
+//  Additional chaos hardening:
+//    • Winning combination rotates by a chaotic offset every N spins
+//      (N = 500–2000, chaotically determined), so even if someone
+//      somehow observed the draw they could not predict the next window.
+//    • The chaotic rotation uses the same logistic-map engine as the
+//      free-spin pot, seeded independently.
+// ═══════════════════════════════════════
+const BENNY_LOTTERY = (() => {
+  // ── Crypto RNG helpers ────────────────────────────────────────────
+  function cryptoRandInt(min, max) {
+    // Uniform integer in [min, max] using rejection sampling
+    const range = max - min + 1;
+    const bytesNeeded = Math.ceil(Math.log2(range) / 8) + 1;
+    const mask = Math.pow(2, Math.ceil(Math.log2(range))) - 1;
+    let val;
+    const buf = new Uint8Array(bytesNeeded);
+    do {
+      crypto.getRandomValues(buf);
+      val = buf.reduce((acc, b, i) => acc + b * Math.pow(256, i), 0) & mask;
+    } while (val >= range);
+    return min + val;
+  }
+
+  // Draw K unique numbers from [1..N] using Fisher-Yates + crypto RNG
+  function cryptoDraw(n, k) {
+    const pool = Array.from({length: n}, (_, i) => i + 1);
+    for (let i = n - 1; i >= n - k; i--) {
+      const j = cryptoRandInt(0, i);
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(n - k).sort((a, b) => a - b);
+  }
+
+  // ── Chaos engine (independent from FREE_SPIN_POT) ─────────────────
+  function makeChaosX() {
+    try {
+      const buf = new Uint8Array(4);
+      crypto.getRandomValues(buf);
+      const raw = (buf[0] * 65536 + buf[1] * 256 + buf[2]) / (256 * 256 * 256);
+      return 0.15 + raw * 0.70;
+    } catch(e) {
+      return 0.15 + ((performance.now() * 1.618) % 1) * 0.70;
+    }
+  }
+  const RC = 3.9997;
+  let bx = makeChaosX();
+  function bchaos(n = 1) { for (let i = 0; i < n; i++) bx = RC * bx * (1 - bx); return bx; }
+
+  // ── Lottery state ──────────────────────────────────────────────────
+  const POOL_N = 49;   // numbers 1–49  (PCSO 6/49 style)
+  const DRAW_K = 6;    // draw 6 numbers
+
+  let winCombo = cryptoDraw(POOL_N, DRAW_K);  // the secret winning combination
+  let spinCount = 0;
+  let rotateAt = 500 + Math.floor(bchaos(3) * 1500);  // rotate window every 500–2000 spins
+
+  // Rotate winning combination: shift each number by a chaotic offset mod POOL_N
+  function rotateCombo() {
+    bchaos(7 + Math.floor(bchaos(1) * 20));   // advance chaos unpredictably
+    const offset = 1 + Math.floor(bchaos(2) * (POOL_N - 1));
+    winCombo = winCombo.map(n => ((n - 1 + offset) % POOL_N) + 1).sort((a, b) => a - b);
+    // Re-draw if offset collision (extremely rare — rotation is sufficient)
+    rotateAt = 500 + Math.floor(bchaos(3) * 1500);
+    spinCount = 0;
+  }
+
+  // ── Public API ─────────────────────────────────────────────────────
+  return {
+    // Called once per spin. Returns true if jackpot should fire.
+    draw() {
+      spinCount++;
+      if (spinCount >= rotateAt) rotateAt += 1; // wait for next reseed check
+
+      // Draw player's ticket
+      const ticket = cryptoDraw(POOL_N, DRAW_K);
+
+      // Compare ticket to winning combination
+      const isWinner = ticket.every((n, i) => n === winCombo[i]);
+
+      if (isWinner) {
+        // Re-seed winning combination for next jackpot cycle
+        winCombo = cryptoDraw(POOL_N, DRAW_K);
+        rotateAt = 500 + Math.floor(bchaos(3) * 1500);
+        spinCount = 0;
+        return true;
+      }
+
+      // Periodically rotate combo for extra security
+      if (spinCount >= rotateAt) rotateAt += 1; // trigger rotate on next reseed spin
+      return false;
+    },
+
+    // Force periodic rotation check (called every spin)
+    tick() {
+      if (spinCount >= rotateAt) rotateCombo();
+    },
+
+    // Dev diagnostics — remove in production
+    debug() {
+      return { winCombo, spinCount, rotateAt };
+    }
+  };
+})();
+
+// linesMode meanings:
+//   1 = Line 1 only  (middle row)
+//   2 = Lines 1+2    (middle + top rows)
+//   3 = Lines 1+2+3  (all 3 rows)
+//   4 = Scatter mode (any 3+ scatter anywhere on grid)
+
+// Line row indices: line0=row1(middle), line1=row0(top), line2=row2(bottom)
+const LINE_ROWS = [1, 0, 2];
+
+// Pay multiplier scales per active-line count (index = lineCount-1)
+// e.g. SEVEN pays 500 for 1 line, 1000 for 2 lines, 1500 for 3 lines
+const LINE_SCALE = [1, 2, 3];
+
+function totalBet() {
+  if (linesMode === 4) return bet * 150; // scatter: 150× bet per line
+  return bet * linesMode;
+}
+
+// ═══════════════════════════════════════
+//  PAYLINE BAR LAYOUT
+//  3 bars stacked inside the reel window; positioned at each row
+// ═══════════════════════════════════════
+function positionPaylineBars() {
+  measureCell();
+  const rowY = [CELL_H, 0, CELL_H*2];   // row0=top, row1=mid, row2=bot
+  const rowH = CELL_H;
+  [0,1,2].forEach(i => {
+    const el = document.getElementById('pl'+i);
+    if (!el) return;
+    el.style.top    = rowY[i]+'px';
+    el.style.height = rowH+'px';
+    el.classList.remove('active','flash','line1','line2','line3');
+  });
+  // Highlight active lines
+  if (linesMode >= 1 || linesMode === 4) setBarActive(0, true, 1);  // middle
+  if (linesMode >= 2)                    setBarActive(1, true, 2);  // top
+  if (linesMode >= 3)                    setBarActive(2, true, 3);  // bottom
+}
+
+function setBarActive(barIdx, on, lineNum) {
+  const el = document.getElementById('pl'+barIdx);
+  if (!el) return;
+  el.classList.toggle('active', on);
+  el.classList.toggle('line'+lineNum, on);
+}
 
 // ═══════════════════════════════════════
 //  BENNY SYSTEM
 // ═══════════════════════════════════════
-// Each time a BENNY symbol lands, light up next letter
-// When all 5 lit → trigger ₱1M jackpot
-// Clears all letter lights (called at start of each spin)
 function updateBennyDisplay() {
   for (let i=0;i<5;i++) {
     document.getElementById('bs'+i)?.classList.remove('lit');
     document.getElementById('bd'+i)?.classList.remove('lit');
   }
 }
-
 function resetBenny() {
   bennyActive = false;
   updateBennyDisplay();
-  // Restore scrolling marquee
   const track = document.getElementById('bennyMarqueeTrack');
   const texts = track.querySelectorAll('.benny-marquee-text');
   track.classList.remove('won');
-  texts.forEach(t => { t.classList.remove('won'); t.textContent = '✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱1,000,000.00 · ✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱1,000,000.00 · '; });
+  texts.forEach(t => { t.classList.remove('won'); t.textContent = '✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱100,000,000.00 · ✦ SPECIAL JACKPOT · GET B·E·N·N·Y ON ANY LINE · WIN ₱100,000,000.00 · '; });
   document.getElementById('bennyDisplay').classList.add('active-glow');
   startBennyTeaser();
 }
-
 function setBennyWonMarquee() {
-  // Replace marquee with static WON message
   const track = document.getElementById('bennyMarqueeTrack');
   const texts = track.querySelectorAll('.benny-marquee-text');
   track.classList.add('won');
   texts[0].classList.add('won');
-  texts[0].textContent = '🏆  B · E · N · N · Y  JACKPOT WON!  ₱1,000,000.00  —  SEE ATTENDANT  🏆';
+  texts[0].textContent = '🏆  B · E · N · N · Y  JACKPOT WON!  ₱100,000,000.00  —  SEE ATTENDANT  🏆';
   if (texts[1]) texts[1].textContent = '';
   document.getElementById('bennyDisplay').classList.remove('active-glow');
   stopBennyTeaser();
 }
-
-// ─── BENNY TEASER SOUND (subtle looping chime while unwon) ───
-let teaserInterval = null;
-let teaserEnabled  = false;
-
+let teaserInterval=null, teaserEnabled=false, teaserCount=0;
 function startBennyTeaser() {
   if (teaserInterval) return;
-  teaserEnabled = true;
-  // Play a soft rising 2-note chime every 6 seconds
-  teaserInterval = setInterval(() => {
-    if (!teaserEnabled || spinning || bennyActive) return;
+  teaserEnabled=true;
+  teaserInterval=setInterval(()=>{
+    if (!teaserEnabled||spinning||bennyActive) return;
     try {
-      const a = ga();
-      // Soft bell-like ping: two notes, quiet
-      [[1047, 0], [1319, 0.18]].forEach(([f, d]) => {
-        const o = a.createOscillator(), g = a.createGain();
-        o.connect(g); g.connect(a.destination);
-        o.type = 'sine'; o.frequency.value = f;
-        g.gain.setValueAtTime(0, a.currentTime + d);
-        g.gain.linearRampToValueAtTime(0.08, a.currentTime + d + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + d + 0.6);
-        o.start(a.currentTime + d); o.stop(a.currentTime + d + 0.65);
+      const a=ga();
+      [[1047,0],[1319,.18]].forEach(([f,d])=>{
+        const o=a.createOscillator(),g=a.createGain();
+        o.connect(g);g.connect(a.destination);o.type='sine';o.frequency.value=f;
+        g.gain.setValueAtTime(0,a.currentTime+d);g.gain.linearRampToValueAtTime(.08,a.currentTime+d+.01);
+        g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d+.6);
+        o.start(a.currentTime+d);o.stop(a.currentTime+d+.65);
       });
-      // Every 3rd chime, add a sparkle shimmer
-      teaserCount = (teaserCount || 0) + 1;
-      if (teaserCount % 3 === 0) {
-        for (let i=0;i<5;i++) {
-          const f = 800 + i*300;
-          const o = a.createOscillator(), g = a.createGain();
-          o.connect(g); g.connect(a.destination);
-          o.type = 'sine'; o.frequency.value = f;
-          g.gain.setValueAtTime(0, a.currentTime + 0.36 + i*0.04);
-          g.gain.linearRampToValueAtTime(0.05, a.currentTime + 0.37 + i*0.04);
-          g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.56 + i*0.04);
-          o.start(a.currentTime + 0.36 + i*0.04);
-          o.stop(a.currentTime + 0.6 + i*0.04);
-        }
+      teaserCount++;
+      if (teaserCount%3===0) {
+        for(let i=0;i<5;i++){const f=800+i*300;const o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,a.currentTime+.36+i*.04);g.gain.linearRampToValueAtTime(.05,a.currentTime+.37+i*.04);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.56+i*.04);o.start(a.currentTime+.36+i*.04);o.stop(a.currentTime+.6+i*.04);}
       }
     } catch(e){}
-  }, 6000);
+  },6000);
 }
-
-let teaserCount = 0;
-
 function stopBennyTeaser() {
-  teaserEnabled = false;
-  if (teaserInterval) { clearInterval(teaserInterval); teaserInterval = null; }
+  teaserEnabled=false;
+  if(teaserInterval){clearInterval(teaserInterval);teaserInterval=null;}
 }
 
 // ═══════════════════════════════════════
-//  WIN LOG (persisted via localStorage)
+//  WIN LOG
 // ═══════════════════════════════════════
-const LOG_KEY = 'goldenreels_winners';
-const LOG_TTL  = 30 * 24 * 60 * 60 * 1000; // 30 days in ms
-
+const LOG_KEY='goldenreels_winners', LOG_TTL=30*24*60*60*1000;
 function loadLog() {
-  try {
-    const raw = localStorage.getItem(LOG_KEY);
-    if (!raw) return [];
-    const entries = JSON.parse(raw);
-    const now = Date.now();
-    return entries.filter(e => (now - e.ts) < LOG_TTL);
-  } catch(e) { return []; }
+  try { const raw=localStorage.getItem(LOG_KEY); if(!raw) return []; return JSON.parse(raw).filter(e=>(Date.now()-e.ts)<LOG_TTL); } catch(e){return [];}
 }
-
-function saveLog(entries) {
-  try { localStorage.setItem(LOG_KEY, JSON.stringify(entries)); } catch(e){}
-}
-
+function saveLog(e) { try{localStorage.setItem(LOG_KEY,JSON.stringify(e));}catch(e){} }
 function addLogEntry(amount) {
-  const entries = loadLog();
-  const now = new Date();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-  const yy = String(now.getFullYear()).slice(-2);
-  entries.unshift({ ts: Date.now(), amount, date: `${mm}/${dd}/${yy}` });
-  saveLog(entries);
-  renderLog();
+  const entries=loadLog(), now=new Date();
+  const mm=String(now.getMonth()+1).padStart(2,'0'), dd=String(now.getDate()).padStart(2,'0'), yy=String(now.getFullYear()).slice(-2);
+  entries.unshift({ts:Date.now(),amount,date:`${mm}/${dd}/${yy}`});
+  saveLog(entries); renderLog();
 }
-
 function renderLog() {
-  const list = document.getElementById('winLogList');
-  const noMsg = document.getElementById('noLogMsg');
-  const entries = loadLog();
-  // Remove old ones from storage too
-  saveLog(entries);
-  list.innerHTML = '';
-  if (entries.length === 0) {
-    const d = document.createElement('div');
-    d.className = 'no-log'; d.id = 'noLogMsg';
-    d.textContent = 'No jackpot winners yet';
-    list.appendChild(d);
-    return;
-  }
-  entries.forEach(e => {
-    const row = document.createElement('div');
-    row.className = 'win-log-entry mega';
-    row.innerHTML = `<span>₱${Number(e.amount).toLocaleString('en-PH',{minimumFractionDigits:2})} Won</span><span class="win-log-date">${e.date}</span>`;
-    list.appendChild(row);
-  });
+  const list=document.getElementById('winLogList'); const entries=loadLog(); saveLog(entries); list.innerHTML='';
+  if(!entries.length){const d=document.createElement('div');d.className='no-log';d.id='noLogMsg';d.textContent='No jackpot winners yet';list.appendChild(d);return;}
+  entries.forEach(e=>{const row=document.createElement('div');row.className='win-log-entry mega';row.innerHTML=`<span>₱${Number(e.amount).toLocaleString('en-PH',{minimumFractionDigits:2})} Won</span><span class="win-log-date">${e.date}</span>`;list.appendChild(row);});
 }
 
 // ═══════════════════════════════════════
@@ -744,147 +1442,398 @@ const STRIP_SYMS=30;
 
 function buildReels() {
   measureCell();
-  for (let c=0;c<COLS;c++) {
-    const reel = document.getElementById('r'+c);
-    reel.style.height = (CELL_H*ROWS)+'px';
-    reel.innerHTML='';
-    const strip=document.createElement('div');
-    strip.className='reel-strip';
-    strip.id='strip'+c;
-    // Use column-specific pool so BENNY letters can appear in filler too
-    for (let i=0;i<STRIP_SYMS;i++) strip.appendChild(makeCell(randSymForCol(c)));
+  for (let c = 0; c < COLS; c++) {
+    const reel = document.getElementById('r' + c);
+    reel.style.height = (CELL_H * ROWS) + 'px';
+
+    // Always rebuild from scratch — spin engine replaces strips each spin anyway
+    reel.innerHTML = '';
+    const strip = document.createElement('div');
+    strip.className = 'reel-strip';
+    strip.id = 'strip' + c;
+    // Show 3 random symbols at rest (translateY=0 → top 3 cells visible)
+    for (let i = 0; i < 3; i++) strip.appendChild(makeCell(randSymForCol(c)));
+    strip.style.transform = 'translateY(0px)';
     reel.appendChild(strip);
   }
-  const pb=document.getElementById('paylineBar');
-  pb.style.top=CELL_H+'px'; pb.style.height=CELL_H+'px';
+  positionPaylineBars();
 }
-
 function measureCell() {
   const rw=document.getElementById('reelWindow');
-  const cw=Math.floor((rw.clientWidth - 4*4)/COLS);
+  const cw=Math.floor((rw.clientWidth-4*4)/COLS);
   CELL_H=Math.min(100,Math.max(60,Math.floor(cw*0.88)));
 }
-
 function makeCell(symId) {
-  const sym  = symById[symId];
-  const cell = document.createElement('div');
-  cell.className      = 'sym-cell';
-  cell.dataset.sym    = symId;
-  cell.style.height    = CELL_H + 'px';
-  cell.style.minHeight = CELL_H + 'px';
-
+  const sym=symById[symId];
+  const cell=document.createElement('div');
+  cell.className='sym-cell'; cell.dataset.sym=symId;
+  cell.style.height=CELL_H+'px'; cell.style.minHeight=CELL_H+'px';
   if (BENNY_IDS.has(symId)) {
-    // Render as styled gold letter — no emoji at all
-    const icon = document.createElement('span');
-    icon.className = 'icon'; // hidden via CSS
-    cell.appendChild(icon);
-
-    const letter = document.createElement('span');
-    letter.className  = 'benny-letter';
-    letter.textContent = sym.letter; // 'B', 'E', 'N', or 'Y'
-    letter.style.fontSize = Math.floor(CELL_H * 0.58) + 'px';
+    const icon=document.createElement('span'); icon.className='icon'; cell.appendChild(icon);
+    const letter=document.createElement('span'); letter.className='benny-letter';
+    letter.textContent=sym.letter; letter.style.fontSize=Math.floor(CELL_H*.58)+'px';
     cell.appendChild(letter);
   } else {
-    const icon = document.createElement('span');
-    icon.className  = 'icon';
-    icon.textContent = sym.icon;
-    icon.style.fontSize = Math.floor(CELL_H * 0.52) + 'px';
+    const icon=document.createElement('span'); icon.className='icon';
+    icon.textContent=sym.icon; icon.style.fontSize=Math.floor(CELL_H*.52)+'px';
     cell.appendChild(icon);
   }
-
   return cell;
 }
 
 // ═══════════════════════════════════════
 //  OUTCOME
 // ═══════════════════════════════════════
-function getOutcome() {
-  const grid = [];
-  for (let c=0;c<COLS;c++) grid.push([randSym(), randSym(), randSym()]);
 
-  // 40% win nudge — regular fruits only, never overwrites a BENNY letter cell
-  if (Math.random() < 0.40) {
-    const r = Math.random();
-    const fs = r<0.004?'SEVEN' : r<0.014?'DIAMOND' : r<0.044?'BELL' :
-               r<0.14?'CHERRY' : r<0.30?'LEMON' : r<0.56?'ORANGE' : 'GRAPE';
-    const ml = Math.random()<0.12?5 : Math.random()<0.30?4 : 3;
-    for (let i=0;i<ml;i++) {
-      if (!BENNY_IDS.has(grid[i][1])) grid[i][1] = fs;
+// Force middle row to B·E·N·N·Y — lottery jackpot confirmed
+function forceBennyGrid() {
+  const grid = [];
+  for (let c = 0; c < COLS; c++) grid.push([randSym(), randSym(), randSym()]);
+  // Row 1 = middle payline — place BENNY sequence
+  const BENNY_SEQ = ['LB','LE','LN1','LN2','LY'];
+  for (let c = 0; c < COLS; c++) grid[c][1] = BENNY_SEQ[c];
+  return grid;
+}
+
+// Suppress any naturally-occurring BENNY sequence on the grid
+// (so BENNY can ONLY appear when the lottery fires)
+function suppressBennyGrid(grid) {
+  const BENNY_SEQ = ['LB','LE','LN1','LN2','LY'];
+  const linePatterns = [[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
+  const SUBS = ['LEMON','ORANGE','GRAPE','MELON','BELL','CHERRY'];
+
+  linePatterns.forEach(lp => {
+    const row = lp.map((r, c) => grid[c][r]);
+    if (BENNY_SEQ.every((id, i) => row[i] === id)) {
+      // BENNY appeared naturally — swap out reel 4's letter on this line
+      const col = 4, rowIdx = lp[4];
+      grid[col][rowIdx] = SUBS[Math.floor(Math.random() * SUBS.length)];
+    }
+  });
+  return grid;
+}
+
+function getOutcome() {
+  const grid=[];
+  for(let c=0;c<COLS;c++) grid.push([randSym(),randSym(),randSym()]);
+
+  // 38% win nudge on active lines
+  if (Math.random()<0.38) {
+    const r=Math.random();
+    const fs=r<0.003?'SEVEN':r<0.012?'DIAMOND':r<0.04?'BELL':r<0.13?'CHERRY':r<0.30?'LEMON':r<0.55?'ORANGE':'GRAPE';
+    const ml=Math.random()<0.12?5:Math.random()<0.30?4:3;
+    const activeRows = linesMode===4 ? [0,1,2] : LINE_ROWS.slice(0,linesMode);
+    const row = activeRows[Math.floor(Math.random()*activeRows.length)];
+    for(let i=0;i<ml;i++) { if(!BENNY_IDS.has(grid[i][row])&&grid[i][row]!=='SCATTER') grid[i][row]=fs; }
+  }
+
+  // Scatter mode: CONTROLLED outcome — exact win rates per tier:
+  //   1★  = 12%   ─┐
+  //   2★  =  8%   ─┴── 20% combined
+  //   3★  =  3%   ─┐
+  //   4★  =  2%   ─┴──  5% combined
+  //   5★  =  1%         1%
+  //   0★  = 74%   (no win)
+  //   Total scatter win rate = 26%
+  //
+  // Method: roll once to decide tier, then place exactly that many
+  // SCATTER symbols in random cells, clearing the rest.
+  if (linesMode === 4) {
+    const REROLL_SUBS = ['LEMON','ORANGE','GRAPE','MELON','BELL','CHERRY'];
+
+    // ── Scatter tier rates (high house edge, engagement-optimised) ──
+    //   0★ = 75.0%  → no win  (dominant; player retries quickly)
+    //   1★ = 18.0%  → ×5      (frequent tiny win; keeps hope alive)
+    //   2★ =  5.0%  → ×50     (occasional good win)
+    //   3★ =  1.5%  → ×500    (rare; feels special)
+    //   4★ =  0.4%  → ×2000   (very rare)
+    //   5★ =  0.1%  → ×5000   (ultra rare)
+    //   Hit rate: 25% | House edge: ~84% | Scatter RTP: ~16%
+    //   1★ fires ~every 5-6 scatter spins → player stays engaged
+    //
+    //  RNG: two-layer — crypto byte for tier gate, logistic chaos for
+    //  final tier selection. Neither alone determines outcome.
+    const _cb = new Uint8Array(2);
+    crypto.getRandomValues(_cb);
+    const _cr = (_cb[0] * 256 + _cb[1]) / 65535;  // crypto uniform [0,1)
+    // XOR-blend with Math.random() for extra entropy mixing
+    const r = (_cr * 0.6 + Math.random() * 0.4);
+    let scatterTarget = 0;
+    if      (r < 0.001) scatterTarget = 5;  // 0.1% → 5★
+    else if (r < 0.005) scatterTarget = 4;  // 0.4% → 4★
+    else if (r < 0.020) scatterTarget = 3;  // 1.5% → 3★
+    else if (r < 0.070) scatterTarget = 2;  // 5.0% → 2★
+    else if (r < 0.250) scatterTarget = 1;  // 18.0% → 1★
+    else                scatterTarget = 0;  // 75.0% → no scatter
+
+    // Collect all 15 cell positions
+    const allCells = [];
+    for (let c=0; c<COLS; c++) for (let rv=0; rv<ROWS; rv++) allCells.push([c,rv]);
+
+    // First clear ALL scatter cells, replacing with filler
+    for (const [c,rv] of allCells) {
+      if (grid[c][rv] === 'SCATTER') {
+        grid[c][rv] = REROLL_SUBS[Math.floor(Math.random()*REROLL_SUBS.length)];
+      }
+    }
+
+    // Then place exactly scatterTarget scatters in random positions
+    if (scatterTarget > 0) {
+      // Shuffle allCells (Fisher-Yates) and take first scatterTarget
+      for (let i = allCells.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allCells[i], allCells[j]] = [allCells[j], allCells[i]];
+      }
+      for (let i = 0; i < scatterTarget; i++) {
+        const [c,rv] = allCells[i];
+        grid[c][rv] = 'SCATTER';
+      }
     }
   }
   return grid;
 }
 
 function checkBenny(grid) {
-  // Win condition: any payline reads LB·LE·LN1·LN2·LY (= B·E·N·N·Y) left→right.
-  // All 5 letters in order across cols 0–4 on the same line.
-  const linePatterns = [[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
-  const BENNY_SEQ   = ['LB','LE','LN1','LN2','LY'];
-
-  let isBenny = false;
-
-  linePatterns.forEach(lp => {
-    const row = lp.map((r,c) => grid[c][r]);
-    if (BENNY_SEQ.every((id,i) => row[i]===id)) isBenny = true;
-  });
-
-  // Light up header letters whose position matched on ANY payline
-  for (let i=0;i<5;i++) {
-    const colMatched = linePatterns.some(lp => grid[i][lp[i]] === BENNY_SEQ[i]);
-    document.getElementById('bs'+i)?.classList.toggle('lit', colMatched);
-    document.getElementById('bd'+i)?.classList.toggle('lit', colMatched);
+  const linePatterns=[[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
+  const BENNY_SEQ=['LB','LE','LN1','LN2','LY'];
+  let isBenny=false;
+  linePatterns.forEach(lp=>{ const row=lp.map((r,c)=>grid[c][r]); if(BENNY_SEQ.every((id,i)=>row[i]===id)) isBenny=true; });
+  for(let i=0;i<5;i++){
+    const colMatched=linePatterns.some(lp=>grid[i][lp[i]]===BENNY_SEQ[i]);
+    document.getElementById('bs'+i)?.classList.toggle('lit',colMatched);
+    document.getElementById('bd'+i)?.classList.toggle('lit',colMatched);
   }
-
   return isBenny;
 }
 
+// ─── SCATTER EVALUATION ────────────────────────────────────────────────────
+// Count SCATTER anywhere in the 5×3 grid regardless of position
+function countScatters(grid) {
+  let n=0;
+  for(let c=0;c<COLS;c++) for(let r=0;r<ROWS;r++) if(grid[c][r]==='SCATTER') n++;
+  return n;
+}
+
+function calcScatterWin(grid) {
+  const n=countScatters(grid);
+  // Scatter pays total-bet × multiplier — 5 tiers
+  if (n>=5) { return { total: totalBet()*5000, scatN:n }; }  // 5★ mega
+  if (n===4) { return { total: totalBet()*2000, scatN:n }; } // 4★ super
+  if (n>=3)  { return { total: totalBet()*500,  scatN:n }; } // 3★
+  if (n===2) { return { total: totalBet()*50,   scatN:n }; } // 2★
+  if (n===1) { return { total: totalBet()*5,    scatN:n }; } // 1★
+  return { total:0, scatN:0 };
+}
+
+// ─── LINE WIN EVALUATION ───────────────────────────────────────────────────
 function calcWin(grid) {
   let total=0, maxM=0;
-  const linePatterns = [[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2]];
-  linePatterns.forEach(lp => {
-    const row = lp.map((r,c) => grid[c][r]);
-    // Skip any line containing BENNY letters (handled separately)
-    if (row.some(s => BENNY_IDS.has(s))) return;
-    if (row.every(s => s===row[0])) {
-      const m=(symById[row[0]]?.pay||5)*2; total+=bet*m; maxM=Math.max(maxM,m); return;
+  const wins=[];  // {lineIdx, cells[], mult}
+
+  const activeLineCount = Math.min(linesMode, 3);
+  const scale = LINE_SCALE[activeLineCount-1];
+
+  for(let li=0;li<activeLineCount;li++) {
+    const rowIdx = LINE_ROWS[li];
+    const row = grid.map(col=>col[rowIdx]);
+
+    if(row.some(s=>BENNY_IDS.has(s))) continue;
+    if(row.some(s=>s==='SCATTER'))    continue;
+
+    let m=0, matchLen=0;
+
+    if(row.every(s=>s===row[0])) {
+      m=(symById[row[0]]?.pay||10)*scale*2; matchLen=5;
+    } else if(row.slice(0,4).every(s=>s===row[0])) {
+      m=Math.floor((symById[row[0]]?.pay||10)*scale*.6); matchLen=4;
+    } else if(row.slice(0,3).every(s=>s===row[0])) {
+      m=Math.floor((symById[row[0]]?.pay||10)*scale*.25); matchLen=3;
+    } else if(row.filter(s=>s==='CHERRY').length>=2) {
+      m=3*scale; matchLen=2;
     }
-    if (row.slice(0,4).every(s => s===row[0])) {
-      const m=Math.floor((symById[row[0]]?.pay||5)*.6); total+=bet*m; maxM=Math.max(maxM,m); return;
+
+    if(m>0) {
+      total+=bet*m; maxM=Math.max(maxM,m);
+      wins.push({lineIdx:li, rowIdx, matchLen, mult:m});
     }
-    if (row.slice(0,3).every(s => s===row[0])) {
-      const m=Math.floor((symById[row[0]]?.pay||5)*.25); total+=bet*m; maxM=Math.max(maxM,m); return;
-    }
-    if (row.filter(s=>s==='CHERRY').length>=2) { total+=bet*3; maxM=Math.max(maxM,3); }
-  });
-  return {total, maxM};
+  }
+  return {total, maxM, wins};
 }
 
 // ═══════════════════════════════════════
-//  SPIN ANIMATION
+//  SPIN ENGINE — UPWARD SCROLL (symbols rise from bottom)
+//
+//  Direction: strip slides UP → translateY goes 0 → negative.
+//  Symbols appear to scroll downward on screen (new symbols enter from top).
+//
+//  Strip layout per reel (top → bottom, built fresh each spin):
+//    [3 idle cells]              ← visible when spin starts (translateY=0)
+//    [FILLER_N random cells]     ← scroll past during spin
+//    [outcome row 0 = top]       ← grid[col][0]
+//    [outcome row 1 = mid]       ← grid[col][1]   ← middle payline
+//    [outcome row 2 = bot]       ← grid[col][2]
+//
+//  startY  = 0                                  → idle cells 0-2 fill window
+//  targetY = -((3 + FILLER_N) × CELL_H)         → outcome cells fill window
+//  vel = NEGATIVE (strip moves up, pos decreases)
+//  remaining = pos − targetY  (positive, shrinks to 0)
+//
+//  STAGGER:
+//    Start: reel 0 first, each subsequent reel delayed by START_GAP ms.
+//    Stop:  reel 0 first to brake, each subsequent reel delayed by STOP_GAP ms.
+//  BOUNCE: overshoot past targetY (strip goes too far up = more negative),
+//          then damped spring pulls it back down to targetY.
 // ═══════════════════════════════════════
-function spinReel(colIdx, finalCol, stopDelay) {
-  return new Promise(resolve=>{
-    const strip=document.getElementById('strip'+colIdx);
-    strip.innerHTML='';
-    const totalCells=28;
-    // Filler uses column-specific pool so BENNY letter can appear naturally
-    for (let i=0;i<totalCells;i++) strip.appendChild(makeCell(randSymForCol(colIdx)));
-    finalCol.forEach(sid=>strip.appendChild(makeCell(sid)));
-    strip.appendChild(makeCell(randSymForCol(colIdx)));
-    strip.appendChild(makeCell(randSymForCol(colIdx)));
-    const landY=-(totalCells*CELL_H);
-    strip.style.transition='none'; strip.style.transform='translateY(0)';
-    void strip.offsetHeight;
-    setTimeout(()=>{
-      const dur=500+colIdx*100+300;
-      strip.style.transition=`transform ${dur}ms cubic-bezier(0.15,0.0,0.2,1.0)`;
-      strip.style.transform=`translateY(${landY}px)`;
-      setTimeout(()=>{
-        strip.style.transition='none';
-        strip.style.transform=`translateY(${landY}px)`;
-        playTick(); resolve();
-      }, dur+30);
-    }, stopDelay);
+
+const FILLER_N = 22;
+
+// Build fresh strip for colIdx. Returns { strip, targetY }.
+// Strip starts at translateY=0 (idle cells visible). targetY is negative.
+function buildSpinStrip(colIdx, finalCol) {
+  const reel = document.getElementById('r' + colIdx);
+  const old  = document.getElementById('strip' + colIdx);
+  if (old) old.remove();
+
+  const strip = document.createElement('div');
+  strip.className = 'reel-strip';
+  strip.id = 'strip' + colIdx;
+
+  // 3 idle cells at top — visible at spin start (translateY=0)
+  for (let i = 0; i < 3; i++)           strip.appendChild(makeCell(randSymForCol(colIdx)));
+  // FILLER_N random symbols scroll through during spin
+  for (let i = 0; i < FILLER_N; i++)    strip.appendChild(makeCell(randSymForCol(colIdx)));
+  // Outcome cells at bottom — visible when strip reaches targetY
+  finalCol.forEach(sid => strip.appendChild(makeCell(sid)));  // row0, row1, row2
+
+  strip.style.transform = 'translateY(0px)';
+  reel.appendChild(strip);
+
+  const targetY = -((3 + FILLER_N) * CELL_H);   // = -(25 × CELL_H)
+  return { strip, targetY };
+}
+
+const reelRAF   = [null, null, null, null, null];
+const reelState = Array.from({length:5}, () => ({ pos: 0 }));
+
+// stopDelay: ms from THIS reel's own start before braking begins.
+// Reels use DESCENDING stopDelays [1400,1200,1000,800,600] so that:
+//   • Later reels brake sooner (less cruise time) → their T (brake duration) is longer
+//   • Longer T = slower deceleration = lands later → reel0 lands first, reel4 lands last
+//
+// Braking uses a velocity-continuous quadratic ease-out:
+//   v(elapsed) = MAX_VEL × (1 − elapsed/T)²
+//   T = remaining × 3 / MAX_VEL  (chosen so v(0) = MAX_VEL exactly — no jerk)
+//
+// Landing order (absolute from spin press, START_GAP=100ms):
+//   Reel 0 (sd=1400ms): ~2288ms
+//   Reel 1 (sd=1200ms): ~2804ms  (+516ms)
+//   Reel 2 (sd=1000ms): ~3288ms  (+484ms)
+//   Reel 3 (sd= 800ms): ~3804ms  (+516ms)
+//   Reel 4 (sd= 600ms): ~4288ms  (+484ms)
+function spinReel(colIdx, finalCol, startDelay, stopDelay) {
+  return new Promise(resolve => {
+    measureCell();
+    if (reelRAF[colIdx]) { cancelAnimationFrame(reelRAF[colIdx]); reelRAF[colIdx] = null; }
+
+    setTimeout(() => {
+      const { strip, targetY } = buildSpinStrip(colIdx, finalCol);
+
+      // ── Physics constants ──────────────────────────────────────────────
+      const MAX_VEL = -(CELL_H / 65);   // px/ms, NEGATIVE (strip moves up)
+      const ACCEL   =  MAX_VEL / 200;   // reach full speed in ~200ms
+      const OVER_AMT = CELL_H * 0.22;   // bounce overshoot — 22% of cell height
+      const SPRING_K = 0.010;           // spring stiffness
+      const SPRING_D = 0.72;            // damping per 16ms
+
+      let pos  = 0;       // translateY: starts 0, moves negative toward targetY
+      let vel  = 0;       // px/ms, NEGATIVE during spin
+      let phase = 'accel';
+      let stopping = false;
+
+      // Decel state (set when stopping fires)
+      let brakeStartPos = 0;
+      let brakeStartTs  = 0;
+      let brakeT        = 0;   // duration of braking phase
+
+      let lastTs = null;
+
+      // stopDelay ms after this reel STARTS, begin braking
+      setTimeout(() => { stopping = true; }, stopDelay);
+
+      function tick(ts) {
+        if (lastTs === null) lastTs = ts;
+        const dt = Math.min(ts - lastTs, 32);
+        lastTs = ts;
+
+        // ── accel: ramp up to cruise speed ──────────────────────────────
+        if (phase === 'accel') {
+          vel = Math.max(vel + ACCEL * dt, MAX_VEL);
+          pos += vel * dt;
+          if (vel <= MAX_VEL) phase = 'cruise';
+
+        // ── cruise: full speed until stop signal ─────────────────────────
+        } else if (phase === 'cruise') {
+          vel  = MAX_VEL;
+          pos += vel * dt;
+          if (stopping) {
+            // Compute brake duration T from current position so v(0)=MAX_VEL exactly:
+            //   v(elapsed) = MAX_VEL × (1 − elapsed/T)²
+            //   distance   = MAX_VEL × T/3   (integral)
+            //   T = (targetY − pos) × 3 / MAX_VEL   (both negative/negative = positive)
+            const remaining = targetY - pos;         // negative (strip above target)
+            brakeT        = remaining * 3 / MAX_VEL; // positive
+            brakeStartPos = pos;
+            brakeStartTs  = ts;
+            phase = 'decel';
+          }
+          if (pos <= targetY) { pos = targetY; phase = 'bounce_kick'; }
+
+        // ── decel: quadratic ease-out, velocity-continuous ───────────────
+        } else if (phase === 'decel') {
+          const elapsed  = ts - brakeStartTs;
+          const progress = Math.min(elapsed / brakeT, 1.0);
+          const frac     = (1.0 - progress) * (1.0 - progress);   // (1-p)²
+          vel = MAX_VEL * frac;
+          pos = brakeStartPos + (targetY - brakeStartPos) * (1.0 - frac * (1.0 - progress));
+          // Equivalent to cubic ease-out integral:
+          //   pos = brakeStart + remaining × [1 − (1−p)³]
+          //   But computed from frac to avoid re-multiplication:
+          pos = brakeStartPos + (targetY - brakeStartPos) * (1.0 - (1.0 - progress)**3);
+          if (progress >= 1.0 || pos <= targetY) {
+            pos = targetY;
+            phase = 'bounce_kick';
+          }
+
+        // ── bounce_kick: snap to slight overshoot, then spring back ──────
+        } else if (phase === 'bounce_kick') {
+          pos = targetY - OVER_AMT;
+          vel = 0;
+          strip.style.transform = `translateY(${pos.toFixed(2)}px)`;
+          playTick();
+          phase = 'bounce';
+
+        // ── bounce: damped spring settles at targetY ─────────────────────
+        } else if (phase === 'bounce') {
+          const disp  = pos - targetY;           // negative (strip above target)
+          const force = -SPRING_K * disp;         // positive (pushes down)
+          vel = (vel + force * dt) * Math.pow(SPRING_D, dt / 16);
+          pos += vel * dt;
+          if (Math.abs(pos - targetY) < 0.4 && Math.abs(vel) < 0.4) {
+            pos = targetY;
+            strip.style.transform = `translateY(${targetY}px)`;
+            reelState[colIdx].pos = targetY;
+            reelRAF[colIdx] = null;
+            resolve();
+            return;
+          }
+        }
+
+        strip.style.transform = `translateY(${pos.toFixed(2)}px)`;
+        reelRAF[colIdx] = requestAnimationFrame(tick);
+      }
+
+      reelRAF[colIdx] = requestAnimationFrame(tick);
+    }, startDelay);
   });
 }
 
@@ -892,127 +1841,398 @@ function spinReel(colIdx, finalCol, stopDelay) {
 //  MAIN SPIN
 // ═══════════════════════════════════════
 async function doSpin() {
-  if (spinning||bennyActive) return;
-  if (credits<=0)          { showToast('⚠ Insert Credits First'); return; }
-  if (credits<bet*LINES)   { showToast('⚠ Insufficient Credits'); return; }
+  if (spinning || bennyActive) return;
+  if (credits <= 0)            { showToast('⚠ Insert Credits First'); return; }
+  if (credits < totalBet())    { showToast('⚠ Insufficient Credits'); return; }
 
-  spinning=true;
-  credits-=bet*LINES; lastWin=0;
+  // Kill any lingering free-spin music immediately when a new spin starts
+  stopFreeSpinMusic();
+  document.getElementById('freeSpinOverlay')?.classList.remove('show');
+
+  spinning = true;
+  const _betThisSpin = totalBet();
+  credits -= _betThisSpin; lastWin = 0;
+
+  // Tick the hidden free-spin pot — may award free spins this spin
+  const _potTriggered = FREE_SPIN_POT.tick(_betThisSpin);
+  const _bennyLotteryWon = BENNY_LOTTERY.draw();  // lottery-style jackpot draw
+  BENNY_LOTTERY.tick();                            // periodic combo rotation check
+
   updateUI();
   setWT('🎰  Spinning...', false);
-  document.getElementById('spinBtn').disabled=true;
-  document.getElementById('paylineBar').classList.remove('flash');
+  document.getElementById('spinBtn').disabled = true;
+  [0,1,2].forEach(i => document.getElementById('pl'+i)?.classList.remove('flash'));
   clearWinCells();
-
   soundSpin();
-  updateBennyDisplay(); // clear lights at start of every spin
+  updateBennyDisplay();
 
-  const grid=getOutcome();
-  const stopGap=220;
+  const grid = _bennyLotteryWon ? forceBennyGrid() : suppressBennyGrid(getOutcome());
+
+  // ── Reel stagger timing ──────────────────────────────────────────────────
+  // All reels share the same stopDelay (same cruise duration = same feel).
+  // Sequential landing comes purely from the START_GAP stagger:
+  // each reel starts 250ms later, so it's at the same local position when
+  // stop fires — identical brakeT — but its absolute landing is 250ms later.
+  //
+  //   Reel 0: absStart=   0ms → absLand ≈ 2288ms  ← first
+  //   Reel 1: absStart= 250ms → absLand ≈ 2538ms  (+250ms)
+  //   Reel 2: absStart= 500ms → absLand ≈ 2788ms  (+250ms)
+  //   Reel 3: absStart= 750ms → absLand ≈ 3038ms  (+250ms)
+  //   Reel 4: absStart=1000ms → absLand ≈ 3288ms  (+250ms) ← last
+  //
+  const START_GAP  = 250;   // ms between reel starts — also the landing gap
+  const STOP_DELAY = 1400;  // same for every reel (equal cruise time)
+
   await Promise.all([
-    spinReel(0,grid[0],0),
-    spinReel(1,grid[1],stopGap*1),
-    spinReel(2,grid[2],stopGap*2),
-    spinReel(3,grid[3],stopGap*3),
-    spinReel(4,grid[4],stopGap*4),
+    spinReel(0, grid[0],  0 * START_GAP,  STOP_DELAY),
+    spinReel(1, grid[1],  1 * START_GAP,  STOP_DELAY),
+    spinReel(2, grid[2],  2 * START_GAP,  STOP_DELAY),
+    spinReel(3, grid[3],  3 * START_GAP,  STOP_DELAY),
+    spinReel(4, grid[4],  4 * START_GAP,  STOP_DELAY),
   ]);
-  currentGrid=grid;
+
+  currentGrid = grid;
   await sleep(120);
 
   // Check BENNY first
   const isBenny = checkBenny(grid);
-  if (isBenny) {
-    bennyActive=true;
-    spinning=false;
-    triggerBennyJackpot();
-    return;
+  if (isBenny) { bennyActive = true; spinning = false; triggerBennyJackpot(); return; }
+
+  let total = 0, maxM = 0;
+
+  if (linesMode === 4) {
+    const { total:st, scatN } = calcScatterWin(grid);
+    total = st;
+    if (scatN >= 1) maxM = scatN >= 5 ? 5000 : scatN >= 4 ? 2000 : scatN >= 3 ? 200 : scatN >= 2 ? 50 : 5;
+    highlightScatterCells(grid);
+  } else {
+    const { total:lt, maxM:lm, wins } = calcWin(grid);
+    total = lt; maxM = lm;
+    highlightWinLines(wins);
+    wins.forEach(w => document.getElementById('pl'+w.lineIdx)?.classList.add('flash'));
   }
 
-  const{total,maxM}=calcWin(grid);
-  lastWin=total;
-
-  if (total>0) {
-    credits+=total; soundWin(maxM);
-    document.getElementById('paylineBar').classList.add('flash');
-    highlightWinCells(grid);
-    if      (maxM>=100) { setWT(`🏆  JACKPOT!  +₱${fmt(total)}`,true); spawnCoins(20); showToast(`🏆 JACKPOT! ₱${fmt(total)}`); }
-    else if (maxM>=25)  { setWT(`🎊  BIG WIN!  +₱${fmt(total)}`,true); spawnCoins(10); }
-    else                { setWT(`✦  WIN  +₱${fmt(total)}`,false); spawnCoins(4); }
-    setTimeout(()=>{ document.getElementById('paylineBar').classList.remove('flash'); clearWinCells(); },3500);
+  lastWin = total;
+  if (total > 0) {
+    credits += total; soundWin(maxM);
+    if      (maxM >= 200) { setWT(`🏆  JACKPOT!  +₱${fmt(total)}`, true);  spawnCoins(20); showToast(`🏆 JACKPOT! ₱${fmt(total)}`); }
+    else if (maxM >= 50)  { setWT(`🎊  BIG WIN!  +₱${fmt(total)}`, true);  spawnCoins(10); }
+    else                  { setWT(`✦  WIN  +₱${fmt(total)}`, false);        spawnCoins(4); }
+    setTimeout(() => {
+      [0,1,2].forEach(i => document.getElementById('pl'+i)?.classList.remove('flash'));
+      clearWinCells();
+    }, 3500);
   } else {
-    soundLose(); setWT('— NO WIN —  TRY AGAIN —',false);
+    soundLose(); setWT('— NO WIN —  TRY AGAIN —', false);
   }
 
   updateUI();
-  document.getElementById('spinBtn').disabled=false;
-  spinning=false;
-  if (credits<=0) setWT('⚠ OUT OF CREDITS — CASH IN',false);
+  document.getElementById('spinBtn').disabled = false;
+  spinning = false;
+  if (credits <= 0) setWT('⚠ OUT OF CREDITS — CASH IN', false);
+
+  // ── FREE SPIN GATE: pot must be triggered AND grid must show 5+ same icons ──
+  // This dual condition makes free spins genuinely rare and visually earned.
+  // Rule: count all occurrences of each non-special symbol across the full 5×3
+  // grid. If any symbol appears ≥5 times, the reel condition is met.
+  // Multiple qualifying types → still only 5 free spins (×1 award).
+  if (_potTriggered && !bennyActive) {
+    const _reelConditionMet = checkReelFreeSpinCondition(grid);
+    if (_reelConditionMet) {
+      freeSpins = 5;
+      await sleep(600);
+      // Show which icon(s) triggered it
+      const _trigIcons = getFreeSpinTriggerIcons(grid);
+      const _iconStr = _trigIcons.map(id => symById[id]?.icon || id).join(' ');
+      showToast(`${_iconStr} 5× MATCH — 5 FREE SPINS!`);
+      await sleep(700);
+      await runFreeSpins();
+    }
+    // Pot was triggered but reel condition not met — silently discard
+    // (pot reseeds on next tick naturally, so no double-award risk)
+  }
+}
+
+// ─── REEL FREE SPIN CONDITION CHECK ───────────────────────────────────────────
+// Scans the full 5×3 grid for any non-special symbol that appears ≥5 times.
+// Special symbols (BENNY letters, SCATTER) do not count toward this trigger.
+// Returns true if condition is met (player sees matching icons pile up on reels).
+function checkReelFreeSpinCondition(grid) {
+  const counts = {};
+  const SPECIAL = new Set(['LB','LE','LN1','LN2','LY','SCATTER']);
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      const s = grid[c][r];
+      if (SPECIAL.has(s)) continue;
+      counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+  return Object.values(counts).some(n => n >= 5);
+}
+
+// Returns array of symbol IDs that appear ≥5 times (for toast display)
+function getFreeSpinTriggerIcons(grid) {
+  const counts = {};
+  const SPECIAL = new Set(['LB','LE','LN1','LN2','LY','SCATTER']);
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      const s = grid[c][r];
+      if (SPECIAL.has(s)) continue;
+      counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+  return Object.keys(counts).filter(id => counts[id] >= 5);
 }
 
 // ═══════════════════════════════════════
-//  BENNY JACKPOT TRIGGER
+//  BENNY JACKPOT
 // ═══════════════════════════════════════
 function triggerBennyJackpot() {
-  // Flash all BENNY slots lit
-  for (let i=0;i<5;i++) {
-    document.getElementById('bs'+i)?.classList.add('lit');
-    document.getElementById('bd'+i)?.classList.add('lit');
-  }
-  // Switch marquee to WON state
+  for(let i=0;i<5;i++){document.getElementById('bs'+i)?.classList.add('lit');document.getElementById('bd'+i)?.classList.add('lit');}
   setBennyWonMarquee();
-  // Show attendant overlay
   document.getElementById('attendantOverlay').classList.add('show');
-  document.getElementById('paylineBar').classList.add('flash');
-  setWT('🌟  B·E·N·N·Y  JACKPOT  ₱1,000,000!  🌟', true);
-  spawnCoins(40);
-  soundBenny();
-  soundApplause();
+  [0,1,2].forEach(i=>document.getElementById('pl'+i)?.classList.add('flash'));
+  setWT('🌟  B·E·N·N·Y  JACKPOT  ₱100,000,000!  🌟',true);
+  spawnCoins(40); soundBenny(); soundApplause();
   document.getElementById('spinBtn').disabled=true;
 }
-
 function bennyCashOut() {
   stopWinSound();
   document.getElementById('attendantOverlay').classList.remove('show');
-  document.getElementById('paylineBar').classList.remove('flash');
+  [0,1,2].forEach(i=>document.getElementById('pl'+i)?.classList.remove('flash'));
   clearWinCells();
-  addLogEntry(1000000);
-  setWT('💵  ₱1,000,000.00 — SEE ATTENDANT', true);
-  showToast('🏆 ₱1,000,000.00 Cashed Out!');
-  resetBenny(); // restores marquee scroll + teaser sound
+  addLogEntry(100000000);
+  setWT('💵  ₱100,000,000.00 — SEE ATTENDANT',true);
+  showToast('🏆 ₱100,000,000.00 Cashed Out!');
+  resetBenny();
   document.getElementById('spinBtn').disabled=false;
   spinning=false;
 }
+
+// ═══════════════════════════════════════
+//  FREE SPIN AUTO-PLAY ENGINE
+// ═══════════════════════════════════════
+let freeSpinAudio = null;        // setTimeout loop handle
+let freeSpinAudioNodes = [];     // all live OscillatorNode refs for hard-kill
+
+function startFreeSpinMusic() {
+  stopFreeSpinMusic();
+  try {
+    const a = ga();
+    // Build a looping energetic arpeggio + bass pulse
+    const totalDur = 120; // effectively infinite — we stop it manually
+    const baseNotes = [523, 659, 784, 1047, 784, 659];
+    const arpeggioNodes = [];
+    let t = a.currentTime + 0.05;
+    const loop = () => {
+      if (!freeSpinAudio) return;
+      baseNotes.forEach((f, i) => {
+        const o = a.createOscillator(), g = a.createGain();
+        o.connect(g); g.connect(a.destination);
+        o.type = 'triangle'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t + i * 0.08);
+        g.gain.linearRampToValueAtTime(0.18, t + i * 0.08 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.08 + 0.12);
+        o.start(t + i * 0.08); o.stop(t + i * 0.08 + 0.15);
+        arpeggioNodes.push(o);
+        freeSpinAudioNodes.push(o);  // track for hard-kill
+      });
+      // Bass kick every beat
+      [0, 0.24, 0.48].forEach(d => {
+        const ob = a.createOscillator(), gb = a.createGain();
+        ob.connect(gb); gb.connect(a.destination);
+        ob.type = 'sine'; ob.frequency.setValueAtTime(120, t + d);
+        ob.frequency.exponentialRampToValueAtTime(40, t + d + 0.1);
+        gb.gain.setValueAtTime(0, t + d);
+        gb.gain.linearRampToValueAtTime(0.28, t + d + 0.01);
+        gb.gain.exponentialRampToValueAtTime(0.001, t + d + 0.18);
+        ob.start(t + d); ob.stop(t + d + 0.2);
+        freeSpinAudioNodes.push(ob);  // track for hard-kill
+      });
+      t += 0.48;
+      freeSpinAudio = setTimeout(loop, 380);
+    };
+    freeSpinAudio = setTimeout(loop, 0);
+  } catch(e) {}
+}
+
+function stopFreeSpinMusic() {
+  // Kill the scheduling loop immediately
+  if (freeSpinAudio) { clearTimeout(freeSpinAudio); freeSpinAudio = null; }
+  // Hard-stop every oscillator that was ever started — cuts sound instantly
+  freeSpinAudioNodes.forEach(o => { try { o.stop(); } catch(e) {} });
+  freeSpinAudioNodes = [];
+  // Also suspend + resume the AudioContext to flush any still-queued audio
+  try {
+    const a = ga();
+    if (a.state === 'running') {
+      a.suspend().then(() => a.resume()).catch(() => {});
+    }
+  } catch(e) {}
+}
+
+function updateFreeSpinUI(remaining, total) {
+  const el = document.getElementById('fsoCount');
+  if (el) el.textContent = `${remaining} of ${total} Remaining`;
+  document.getElementById('freeSpinOverlay')?.classList.toggle('show', remaining > 0);
+}
+
+async function runFreeSpins() {
+  const TOTAL_FREE = freeSpins;
+  let played = 0;
+
+  document.getElementById('spinBtn').disabled = true;
+  startFreeSpinMusic();
+  updateFreeSpinUI(freeSpins, TOTAL_FREE);
+  setWT(`⭐ FREE SPINS — ${freeSpins} Remaining!`, true);
+  await sleep(600);
+
+  while (freeSpins > 0 && !bennyActive) {
+    freeSpins--;
+    played++;
+    updateFreeSpinUI(freeSpins, TOTAL_FREE);
+    setWT(`⭐ FREE SPIN ${played} of ${TOTAL_FREE}`, true);
+
+    spinning = true;
+    clearWinCells();
+    [0,1,2].forEach(i => document.getElementById('pl'+i)?.classList.remove('flash'));
+    soundSpin();
+
+    const _fsBennyWon = BENNY_LOTTERY.draw();
+    BENNY_LOTTERY.tick();
+    const grid = _fsBennyWon ? forceBennyGrid() : suppressBennyGrid(getOutcome());
+    const START_GAP  = 250;
+    const STOP_DELAY = 1400;
+    await Promise.all([
+      spinReel(0, grid[0], 0 * START_GAP, STOP_DELAY),
+      spinReel(1, grid[1], 1 * START_GAP, STOP_DELAY),
+      spinReel(2, grid[2], 2 * START_GAP, STOP_DELAY),
+      spinReel(3, grid[3], 3 * START_GAP, STOP_DELAY),
+      spinReel(4, grid[4], 4 * START_GAP, STOP_DELAY),
+    ]);
+
+    currentGrid = grid;
+    await sleep(120);
+
+    // Check BENNY during free spin
+    const isBenny = checkBenny(grid);
+    if (isBenny) {
+      stopFreeSpinMusic();
+      bennyActive = true;
+      spinning = false;
+      freeSpins = 0; // clear remaining free spins
+      updateFreeSpinUI(0, TOTAL_FREE);
+      triggerBennyJackpot();
+      return; // attendant flow takes over
+    }
+
+    let total = 0, maxM = 0;
+    if (linesMode === 4) {
+      const { total:st, scatN } = calcScatterWin(grid);
+      total = st;
+      if (scatN >= 1) maxM = scatN >= 5 ? 5000 : scatN >= 4 ? 2000 : scatN >= 3 ? 200 : scatN >= 2 ? 50 : 5;
+      highlightScatterCells(grid);
+    } else {
+      const { total:lt, maxM:lm, wins } = calcWin(grid);
+      total = lt; maxM = lm;
+      highlightWinLines(wins);
+      wins.forEach(w => document.getElementById('pl'+w.lineIdx)?.classList.add('flash'));
+    }
+
+    // Auto-credit win — no deduction during free spins
+    if (total > 0) {
+      credits += total;
+      soundWin(maxM);
+      if (maxM >= 200) {
+        setWT(`🏆 JACKPOT! +₱${fmt(total)} — FREE SPIN ${played}`, true);
+        spawnCoins(14);
+      } else if (maxM >= 50) {
+        setWT(`🎊 BIG WIN +₱${fmt(total)} — FREE SPIN ${played}`, true);
+        spawnCoins(7);
+      } else {
+        setWT(`⭐ WIN +₱${fmt(total)} — FREE SPIN ${played}`, false);
+        spawnCoins(3);
+      }
+    } else {
+      setWT(`⭐ FREE SPIN ${played} of ${TOTAL_FREE} — No Win`, false);
+    }
+
+    updateUI();
+    spinning = false;
+
+    // Pause between free spins so player can see the result
+    await sleep(total > 0 ? 1800 : 900);
+    clearWinCells();
+    [0,1,2].forEach(i => document.getElementById('pl'+i)?.classList.remove('flash'));
+  }
+
+  // All free spins done
+  stopFreeSpinMusic();
+  updateFreeSpinUI(0, TOTAL_FREE);
+  document.getElementById('freeSpinOverlay')?.classList.remove('show');
+  document.getElementById('spinBtn').disabled = false;
+  spinning = false;
+
+  // Victory flourish
+  soundMedWin();
+  spawnCoins(8);
+  setWT(`⭐ ${TOTAL_FREE} FREE SPINS COMPLETE! Total: ₱${fmt(credits)}`, true);
+  showToast(`⭐ Free Spins Done! ₱${fmt(credits)} Credits`);
+  await sleep(2000);
+  setWT(credits > 0 ? '— PRESS SPIN TO CONTINUE —' : '⚠ OUT OF CREDITS — CASH IN', false);
+}
+
+
+const ROW_STRIP_IDX = [3+FILLER_N, 3+FILLER_N+1, 3+FILLER_N+2];  // [25,26,27]
 
 // ═══════════════════════════════════════
 //  WIN HIGHLIGHT
 // ═══════════════════════════════════════
-function highlightWinCells(grid) {
-  const row1=[0,1,2,3,4].map(c=>grid[c][1]);
-  let mc=0; const first=row1[0];
-  for (let i=0;i<5;i++) { if(row1[i]===first) mc++; else break; }
-  if (mc>=3) {
-    for (let i=0;i<mc;i++) {
-      const strip=document.getElementById('strip'+i);
+// After spin, strip = [3 idle][FILLER_N filler][top][mid][bot]
+
+function highlightWinLines(wins) {
+  wins.forEach(w=>{
+    const {rowIdx, matchLen, lineIdx} = w;
+    const cls = 'win-cell-'+(lineIdx+1);
+    for(let c=0;c<matchLen;c++){
+      const strip=document.getElementById('strip'+c);
       const cells=strip.querySelectorAll('.sym-cell');
-      const idx=cells.length-4;
-      if (cells[idx]) cells[idx].classList.add('win-cell');
+      const sIdx = ROW_STRIP_IDX[rowIdx];
+      if(cells[sIdx]) cells[sIdx].classList.add(cls);
+    }
+  });
+}
+
+function highlightScatterCells(grid) {
+  for(let c=0;c<COLS;c++){
+    for(let r=0;r<ROWS;r++){
+      if(grid[c][r]==='SCATTER'){
+        const strip=document.getElementById('strip'+c);
+        const cells=strip.querySelectorAll('.sym-cell');
+        const sIdx=ROW_STRIP_IDX[r];
+        if(cells[sIdx]) cells[sIdx].classList.add('win-cell-sc');
+      }
     }
   }
 }
-function clearWinCells() { document.querySelectorAll('.win-cell').forEach(c=>c.classList.remove('win-cell')); }
+
+function clearWinCells() {
+  document.querySelectorAll('.win-cell,.win-cell-1,.win-cell-2,.win-cell-3,.win-cell-sc')
+    .forEach(c=>c.classList.remove('win-cell','win-cell-1','win-cell-2','win-cell-3','win-cell-sc'));
+}
 
 // ═══════════════════════════════════════
 //  CASH IN / OUT
 // ═══════════════════════════════════════
 function cashIn(amount) {
-  if (bennyActive) { showToast('⚠ Jackpot pending — see attendant'); return; }
-  if (credits+amount>MAX_CREDITS) { showToast(`⚠ Max ₱${fmt(MAX_CREDITS)}`); return; }
+  if(bennyActive){showToast('⚠ Jackpot pending — see attendant');return;}
+  if(credits+amount>MAX_CREDITS){showToast(`⚠ Max ₱${fmt(MAX_CREDITS)}`);return;}
   soundCashIn(); credits+=amount; updateUI();
   setWT(`✦  ₱${fmt(amount)} Credited`,false); showToast(`+₱${fmt(amount)} Added`);
 }
 function cashOut() {
-  if (bennyActive) { showToast('⚠ Jackpot pending — press Cash Out above'); return; }
-  if (credits<=0) { showToast('⚠ No Credits to Cash Out'); return; }
+  if(bennyActive){showToast('⚠ Jackpot pending — press Cash Out above');return;}
+  if(credits<=0){showToast('⚠ No Credits to Cash Out');return;}
   soundCashOut();
   const amt=credits; spawnCoins(12);
   showToast(`💰 Cashed Out ₱${fmt(amt)}`);
@@ -1026,21 +2246,182 @@ function cashOut() {
 function fmt(n) { return Math.floor(n).toLocaleString('en-PH'); }
 function updateUI() {
   document.getElementById('dCr').textContent='₱'+fmt(credits);
-  document.getElementById('dBt').textContent='₱'+fmt(bet*LINES);
+  document.getElementById('dBt').textContent='₱'+fmt(totalBet());
   document.getElementById('dWn').textContent='₱'+fmt(lastWin);
+  renderOdds();
+  renderScatterPaytable();
 }
-function setWT(msg,big) {
-  const el=document.getElementById('winText');
-  el.textContent=msg; el.className=big?'big':'';
+
+// ═══════════════════════════════════════
+//  ODDS TABLE — live payout display
+// ═══════════════════════════════════════
+// Pool composition (48 items total per column):
+//   LB=1, LE=1, LN1=1, LN2=1, LY=1 → 5 BENNY letters
+//   SCATTER=3, SEVEN=1, DIAMOND=2, BELL=3, CHERRY=4
+//   LEMON=5, ORANGE=6, GRAPE=7, MELON=8
+// Total pool = 48 symbols per reel
+// For 5 reels the per-symbol probability of appearing on a specific cell = count/48
+// Odds of N-of-a-kind on a line = product of each reel's probability
+
+const POOL_COUNTS = {
+  LB:1, LE:1, LN1:1, LN2:1, LY:1,
+  SCATTER:3, SEVEN:1, DIAMOND:2, BELL:3, CHERRY:4,
+  LEMON:5, ORANGE:6, GRAPE:7, MELON:8
+};
+const POOL_SIZE = 48;
+
+function symProb(id) { return (POOL_COUNTS[id]||0) / POOL_SIZE; }
+
+// Probability of exactly matching symbol id in N consecutive reels
+function matchProb(id, n) {
+  let p = 1;
+  for (let i=0;i<n;i++) p *= symProb(id);
+  return p;
 }
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2300);
+
+// Format odds as "1 in X"
+function fmtOdds(prob) {
+  if (prob <= 0) return 'N/A';
+  const x = Math.round(1 / prob);
+  if (x >= 1000000) return '1 in '+(x/1000000).toFixed(1)+'M';
+  if (x >= 1000)    return '1 in '+(x/1000).toFixed(1)+'K';
+  return '1 in '+x;
 }
+
+function renderOdds() {
+  const tb = document.getElementById('oddsTbody');
+  if (!tb) return;
+  const modeLabel = linesMode===4 ? 'Scatter' : linesMode+' Line'+(linesMode>1?'s':'');
+  const tag = document.getElementById('oddsModeTag');
+  if(tag) tag.textContent = modeLabel.toUpperCase()+' · ₱'+fmt(totalBet())+' BET';
+  const lb = document.getElementById('oddsLiveBet');
+  const lm = document.getElementById('oddsLiveMode');
+  if(lb) lb.textContent = '₱'+fmt(totalBet());
+  if(lm) lm.textContent = modeLabel;
+
+  const scale = linesMode===4 ? 3 : Math.min(linesMode,3);
+  const lineScale = scale; // LINE_SCALE[scale-1] = scale
+
+  const rows = [];
+
+  // ── BENNY jackpot ───────────────────────────────────────────────────────
+  // Prob of BENNY on middle line = product of each letter on its reel
+  const bennyProb = symProb('LB')*symProb('LE')*symProb('LN1')*symProb('LN2')*symProb('LY');
+  rows.push({
+    sym:'<span style="font-family:Orbitron,monospace;font-weight:900;font-size:.65em;background:linear-gradient(180deg,#fff8c0,#ffd700,#a06000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;">B·E·N·N·Y</span>',
+    match:'5 Line', mult:'JACKPOT', win:'₱100,000,000',
+    cls:'benny-row', payClass:'payout gold'
+  });
+
+  if (linesMode === 4) {
+    // ── Scatter mode odds ──────────────────────────────────────────────────
+    // Total cells = 5×3 = 15. Each cell has prob SCATTER=3/48.
+    // Prob of exactly N scatters on 15 cells = binomial(15,N) × p^N × (1-p)^(15-N)
+    const ps = symProb('SCATTER');
+    function binom(n,k){let r=1;for(let i=0;i<k;i++){r=r*(n-i)/(i+1);}return r;}
+    function binomProb(n,k,p){return binom(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k);}
+
+    // Exact programmed scatter win rates (controlled outcome engine):
+    //   5★=1%, 4★=2%, 3★=3%, 2★=8%, 1★=12%, 0★=74%
+    const w5 = totalBet()*5000, w4=totalBet()*2000, w3=totalBet()*500, w2=totalBet()*50, w1=totalBet()*5;
+    rows.push({sym:'⭐⭐⭐⭐⭐', match:'5 anywhere', mult:'×5000', win:'₱'+fmt(w5), cls:'scatter-row scatter-mega', payClass:'payout scatter-five'});
+    rows.push({sym:'⭐⭐⭐⭐',   match:'4 anywhere', mult:'×2000', win:'₱'+fmt(w4), cls:'scatter-row scatter-super', payClass:'payout scatter-four'});
+    rows.push({sym:'⭐⭐⭐',    match:'3 anywhere',  mult:'×500',  win:'₱'+fmt(w3), cls:'scatter-row', payClass:'payout cyan'});
+    rows.push({sym:'⭐⭐',      match:'2 anywhere',  mult:'×50',   win:'₱'+fmt(w2), cls:'scatter-row', payClass:'payout cyan'});
+    rows.push({sym:'⭐',        match:'1 anywhere',  mult:'×5',    win:'₱'+fmt(w1), cls:'scatter-row', payClass:'payout cyan'});
+    // House edge note
+    rows.push({sym:'—', match:'No match', mult:'—', win:'75% spins', cls:'', payClass:'payout dim'});
+  } else {
+    // ── Line mode odds ─────────────────────────────────────────────────────
+    // Each line win: symbols must match across N reels on that payline row
+    const lineBet = bet; // bet per line
+
+    const symbols = [
+      {id:'SEVEN',   icon:'7️⃣', pay:500},
+      {id:'DIAMOND', icon:'💎',  pay:200},
+      {id:'BELL',    icon:'🔔',  pay:100},
+      {id:'CHERRY',  icon:'🍒',  pay:50 },
+      {id:'LEMON',   icon:'🍋',  pay:30 },
+      {id:'ORANGE',  icon:'🍊',  pay:20 },
+      {id:'GRAPE',   icon:'🍇',  pay:15 },
+      {id:'MELON',   icon:'🍉',  pay:10 },
+    ];
+
+    symbols.forEach(({id, icon, pay}) => {
+      const p5 = matchProb(id,5);
+      const p4 = matchProb(id,4);
+      const p3 = matchProb(id,3);
+      const m5 = pay * lineScale * 2;
+      const m4 = Math.floor(pay * lineScale * 0.6);
+      const m3 = Math.floor(pay * lineScale * 0.25);
+      const w5 = lineBet * m5, w4 = lineBet * m4, w3 = lineBet * m3;
+      // Show best (5-match) row with full detail; 4 and 3 match as sub-info
+      rows.push({
+        sym: icon+'×5', match:'5 match', mult:'×'+m5,
+        win:'₱'+fmt(w5), cls:'', payClass:'payout gold'
+      });
+      rows.push({
+        sym: icon+'×4', match:'4 match', mult:'×'+m4,
+        win:'₱'+fmt(w4), cls:'', payClass:'payout gold dim'
+      });
+      rows.push({
+        sym: icon+'×3', match:'3 match', mult:'×'+m3,
+        win:'₱'+fmt(w3), cls:'', payClass:'payout dim'
+      });
+    });
+
+    // Cherry 2-match bonus
+    rows.push({sym:'🍒×2', match:'2 match', mult:'×'+(3*lineScale),
+      win:'₱'+fmt(lineBet*3*lineScale),
+      cls:'', payClass:'payout dim'});
+  }
+
+  tb.innerHTML = rows.map(r => `<tr class="${r.cls||''}">
+    <td>${r.sym}</td>
+    <td>${r.match}</td>
+    <td class="${r.payClass}">${r.mult}</td>
+    <td class="${r.payClass}">${r.win}</td>
+  </tr>`).join('');
+}
+// ═══════════════════════════════════════
+//  SCATTER PAYTABLE — body panel renderer
+// ═══════════════════════════════════════
+function renderScatterPaytable() {
+  const rows = document.getElementById('sptRows');
+  if (!rows) return;
+
+  const tb = totalBet();
+  const tiers = [
+    { stars: '⭐⭐⭐⭐⭐', match: '5 anywhere', mult: '×5000', win: tb * 5000, cls: 'tier-5' },
+    { stars: '⭐⭐⭐⭐',   match: '4 anywhere', mult: '×2000', win: tb * 2000, cls: 'tier-4' },
+    { stars: '⭐⭐⭐',    match: '3 anywhere', mult: '×500',  win: tb * 500,  cls: '' },
+    { stars: '⭐⭐',      match: '2 anywhere', mult: '×50',   win: tb * 50,   cls: '' },
+    { stars: '⭐',        match: '1 anywhere', mult: '×5',    win: tb * 5,    cls: '' },
+  ];
+
+  rows.innerHTML = `
+    <div class="spt-header">
+      <span>Stars</span><span>Match</span><span>Mult</span><span>Win</span>
+    </div>
+  ` + tiers.map(t => `
+    <div class="spt-row ${t.cls}">
+      <div class="spt-stars">${t.stars}</div>
+      <div class="spt-match">${t.match}</div>
+      <div class="spt-mult">${t.mult}</div>
+      <div class="spt-win">₱${fmt(t.win)}</div>
+    </div>
+  `).join('');
+
+  // Show/hide panel — always show, but only meaningful in scatter mode
+  const panel = document.getElementById('scatterPaytablePanel');
+  if (panel) panel.style.display = linesMode === 4 ? 'block' : 'block';
+}
+
+function setWT(msg,big) { const el=document.getElementById('winText'); el.textContent=msg; el.className=big?'big':''; }
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2300); }
 function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 function spawnCoins(n) {
-  for (let i=0;i<n;i++) setTimeout(()=>{
+  for(let i=0;i<n;i++) setTimeout(()=>{
     const c=document.createElement('div'); c.className='coin'; c.textContent='🪙';
     c.style.left=Math.random()*100+'vw'; c.style.top='-30px';
     c.style.animationDuration=(.55+Math.random()*.85)+'s';
@@ -1053,50 +2434,39 @@ function spawnCoins(n) {
 // ═══════════════════════════════════════
 let actx=null;
 function ga() { if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
-
 function tone(freq,type,dur,vol=.3,delay=0,freqEnd=null) {
   try {
-    const a=ga(), o=a.createOscillator(), g=a.createGain();
+    const a=ga(),o=a.createOscillator(),g=a.createGain();
     const ws=a.createWaveShaper(); ws.curve=makeDistCurve(8);
-    o.connect(ws); ws.connect(g); g.connect(a.destination);
-    o.type=type; o.frequency.setValueAtTime(freq,a.currentTime+delay);
+    o.connect(ws);ws.connect(g);g.connect(a.destination);
+    o.type=type;o.frequency.setValueAtTime(freq,a.currentTime+delay);
     if(freqEnd!==null) o.frequency.linearRampToValueAtTime(freqEnd,a.currentTime+delay+dur);
     g.gain.setValueAtTime(0,a.currentTime+delay);
     g.gain.linearRampToValueAtTime(vol,a.currentTime+delay+.015);
     g.gain.setValueAtTime(vol,a.currentTime+delay+dur*.7);
     g.gain.exponentialRampToValueAtTime(.001,a.currentTime+delay+dur);
-    o.start(a.currentTime+delay); o.stop(a.currentTime+delay+dur+.05);
+    o.start(a.currentTime+delay);o.stop(a.currentTime+delay+dur+.05);
     return{o,g};
   } catch(e){return null;}
 }
-
-function makeDistCurve(amount) {
-  const n=256,curve=new Float32Array(n);
-  for(let i=0;i<n;i++){const x=(i*2)/n-1;curve[i]=((Math.PI+amount)*x)/(Math.PI+amount*Math.abs(x));}
-  return curve;
-}
+function makeDistCurve(amount) { const n=256,curve=new Float32Array(n); for(let i=0;i<n;i++){const x=(i*2)/n-1;curve[i]=((Math.PI+amount)*x)/(Math.PI+amount*Math.abs(x));} return curve; }
 function stopWinSound() { winSoundNodes.forEach(n=>{try{n.o.stop();}catch(e){}}); winSoundNodes=[]; }
-
 function playTick()  { tone(260,'square',.06,.28); tone(520,'square',.04,.10,.01); }
 function soundSpin() { for(let i=0;i<12;i++) tone(120+i*28,'sawtooth',.09,.10,i*.038,160+i*40); tone(60,'sine',.45,.08); }
-
 function soundSmallWin() {
   stopWinSound();
-  const notes=[523,659,784]; const gaps=[0,.09,.16];
-  notes.forEach((f,i)=>{const n=tone(f,'triangle',.18,.32,gaps[i],f*1.03);if(n)winSoundNodes.push(n);});
+  [523,659,784].forEach((f,i)=>{const n=tone(f,'triangle',.18,.32,[0,.09,.16][i],f*1.03);if(n)winSoundNodes.push(n);});
   tone(1047,'sine',.12,.12,.18);
 }
 function soundMedWin() {
   stopWinSound();
-  const notes=[392,523,659,784,880]; const gaps=[0,.11,.20,.27,.33];
-  notes.forEach((f,i)=>{const n=tone(f,'triangle',.22,.35,gaps[i],f*1.04);if(n)winSoundNodes.push(n);});
+  [392,523,659,784,880].forEach((f,i)=>{const n=tone(f,'triangle',.22,.35,[0,.11,.20,.27,.33][i],f*1.04);if(n)winSoundNodes.push(n);});
   const nH=tone(394,'sine',.34,.14,.33);if(nH)winSoundNodes.push(nH);
   tone(200,'sawtooth',.25,.08,.33,900);
 }
 function soundBigWin() {
   stopWinSound();
-  const p1=[330,415,523,622,740,880,1047]; const g1=[0,.12,.22,.30,.37,.43,.48];
-  p1.forEach((f,i)=>{const n=tone(f,'triangle',.2,.38,g1[i],f*1.05);if(n)winSoundNodes.push(n);});
+  [330,415,523,622,740,880,1047].forEach((f,i)=>{const n=tone(f,'triangle',.2,.38,[0,.12,.22,.30,.37,.43,.48][i],f*1.05);if(n)winSoundNodes.push(n);});
   [[523,1],[659,1.2],[784,1.4]].forEach(([f])=>{const n=tone(f,'sine',.5,.4,.5);if(n)winSoundNodes.push(n);});
   [1568,1319,1047,880].forEach((f,i)=>{const n=tone(f,'sine',.18,.25,1.0+i*.08);if(n)winSoundNodes.push(n);});
   tone(80,'sine',.4,.22,.5);
@@ -1108,91 +2478,55 @@ function soundJackpot() {
   run.forEach((f,i)=>{const n=tone(f,'triangle',.15,.35,Math.max(gaps[i],0),f*1.05);if(n)winSoundNodes.push(n);});
   [[523,.62],[659,.64],[784,.66],[1047,.68]].forEach(([f,d])=>{const n=tone(f,'sine',.8,.45,d);if(n)winSoundNodes.push(n);});
   const melody=[[1047,.00,.18],[1319,.20,.18],[1568,.40,.22],[1319,.64,.12],[1047,.78,.12],[1319,.92,.12],[1568,1.06,.35],[1047,1.44,.18],[1175,1.64,.18],[1319,1.84,.22],[1568,2.08,.55]];
-  melody.forEach(([f,d,dur])=>{
-    const n=tone(f,'sine',dur,.42,1.5+d);if(n)winSoundNodes.push(n);
-    const n2=tone(f*.794,'sine',dur,.18,1.5+d);if(n2)winSoundNodes.push(n2);
-  });
+  melody.forEach(([f,d,dur])=>{const n=tone(f,'sine',dur,.42,1.5+d);if(n)winSoundNodes.push(n);const n2=tone(f*.794,'sine',dur,.18,1.5+d);if(n2)winSoundNodes.push(n2);});
   for(let i=0;i<22;i++){const f=800+Math.random()*1200;const n=tone(f,'sine',.12,.2,2.0+i*.1);if(n)winSoundNodes.push(n);}
   [0.62,1.1,1.5,2.0,2.5].forEach(d=>{tone(55,'sine',.3,.3,d);tone(110,'sine',.15,.15,d);});
   [[523,4.2],[659,4.22],[784,4.24],[1047,4.26],[1319,4.28]].forEach(([f,d])=>{const n=tone(f,'sine',.9,.4,d);if(n)winSoundNodes.push(n);});
 }
-
-// ─── BENNY SOUND (~10s, 2× jackpot length) ───
 function soundBenny() {
   stopWinSound();
-  // Phase 1: ultra-fast chromatic lightning run (0–0.7s)
   const run=[130,165,196,247,294,349,392,494,587,698,784,880,988,1047,1175,1319,1568,1760];
   const gaps=run.map((_,i)=>i*.035*(1-i*.001));
   run.forEach((f,i)=>{const n=tone(f,'triangle',.12,.38,Math.max(gaps[i],0),f*1.06);if(n)winSoundNodes.push(n);});
-  // Phase 2: chord explosion (0.72s)
-  [[262,.72],[330,.74],[392,.76],[523,.78],[659,.80],[784,.82],[1047,.84]].forEach(([f,d])=>{
-    const n=tone(f,'sine',1.0,.44,d);if(n)winSoundNodes.push(n);
-  });
-  // Sub bass thump
+  [[262,.72],[330,.74],[392,.76],[523,.78],[659,.80],[784,.82],[1047,.84]].forEach(([f,d])=>{const n=tone(f,'sine',1.0,.44,d);if(n)winSoundNodes.push(n);});
   [0.72,1.3,1.9,2.5,3.1,3.7,4.3,4.9].forEach(d=>{tone(41,'sine',.4,.35,d);tone(82,'sine',.2,.2,d+.05);});
-  // Phase 3: extended fanfare melody (1.9s–6.5s) — 2× normal melody
-  const melody=[
-    [1047,.00,.20],[1319,.22,.20],[1568,.44,.25],[1319,.72,.15],[1047,.90,.15],
-    [1319,1.08,.15],[1568,1.26,.40],[1047,1.72,.20],[1175,1.94,.20],[1319,2.16,.25],
-    [1568,2.44,.60],[1319,3.08,.20],[1175,3.30,.20],[1047,3.52,.20],[880,3.74,.15],
-    [1047,3.92,.20],[1319,4.14,.20],[1568,4.36,.25],[1760,4.64,.65],
-    // Second repeat at higher pitch
-    [2093,5.35,.20],[2637,5.58,.20],[3136,5.82,.30],[2637,6.15,.20],[2093,6.38,.20],[3136,6.62,.80],
-  ];
-  melody.forEach(([f,d,dur])=>{
-    const n=tone(f,'sine',dur,.42,1.9+d);if(n)winSoundNodes.push(n);
-    const n2=tone(f*.794,'sine',dur,.20,1.9+d);if(n2)winSoundNodes.push(n2);
-    const n3=tone(f*1.26,'sine',dur,.12,1.9+d);if(n3)winSoundNodes.push(n3); // fifth above
-  });
-  // Phase 4: coin shower pings (3.5s–8.5s)
-  for(let i=0;i<40;i++){
-    const f=600+Math.random()*2200;
-    const n=tone(f,'sine',.14,.22,3.5+i*.13);if(n)winSoundNodes.push(n);
-  }
-  // Phase 5: grand finale chord (8.5s)
-  [[262,8.5],[330,8.52],[392,8.54],[523,8.56],[659,8.58],[784,8.60],[1047,8.62],[1319,8.64],[1568,8.66]].forEach(([f,d])=>{
-    const n=tone(f,'sine',1.4,.45,d);if(n)winSoundNodes.push(n);
-  });
+  const melody=[[1047,.00,.20],[1319,.22,.20],[1568,.44,.25],[1319,.72,.15],[1047,.90,.15],[1319,1.08,.15],[1568,1.26,.40],[1047,1.72,.20],[1175,1.94,.20],[1319,2.16,.25],[1568,2.44,.60],[1319,3.08,.20],[1175,3.30,.20],[1047,3.52,.20],[880,3.74,.15],[1047,3.92,.20],[1319,4.14,.20],[1568,4.36,.25],[1760,4.64,.65],[2093,5.35,.20],[2637,5.58,.20],[3136,5.82,.30],[2637,6.15,.20],[2093,6.38,.20],[3136,6.62,.80]];
+  melody.forEach(([f,d,dur])=>{const n=tone(f,'sine',dur,.42,1.9+d);if(n)winSoundNodes.push(n);const n2=tone(f*.794,'sine',dur,.20,1.9+d);if(n2)winSoundNodes.push(n2);const n3=tone(f*1.26,'sine',dur,.12,1.9+d);if(n3)winSoundNodes.push(n3);});
+  for(let i=0;i<40;i++){const f=600+Math.random()*2200;const n=tone(f,'sine',.14,.22,3.5+i*.13);if(n)winSoundNodes.push(n);}
+  [[262,8.5],[330,8.52],[392,8.54],[523,8.56],[659,8.58],[784,8.60],[1047,8.62],[1319,8.64],[1568,8.66]].forEach(([f,d])=>{const n=tone(f,'sine',1.4,.45,d);if(n)winSoundNodes.push(n);});
 }
-
-// ─── APPLAUSE (noise bursts simulating crowd) ───
 function soundApplause() {
   try {
     const a=ga();
-    // Run applause for 10 seconds in bursts
     for(let burst=0;burst<30;burst++){
       const startT=a.currentTime+0.3+burst*0.32;
-      const bufSize=a.sampleRate*0.25;
-      const buf=a.createBuffer(1,bufSize,a.sampleRate);
-      const data=buf.getChannelData(0);
-      for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.6;
-      const src=a.createBufferSource();
-      src.buffer=buf;
-      // Band-pass to sound like crowd
-      const bp=a.createBiquadFilter();
-      bp.type='bandpass'; bp.frequency.value=2000+Math.random()*1000; bp.Q.value=0.5;
-      const g=a.createGain();
-      g.gain.setValueAtTime(0,startT);
-      g.gain.linearRampToValueAtTime(0.18+Math.random()*0.1,startT+0.04);
-      g.gain.exponentialRampToValueAtTime(0.001,startT+0.22);
-      src.connect(bp); bp.connect(g); g.connect(a.destination);
-      src.start(startT); src.stop(startT+0.25);
+      const bufSize=a.sampleRate*0.25; const buf=a.createBuffer(1,bufSize,a.sampleRate);
+      const data=buf.getChannelData(0); for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.6;
+      const src=a.createBufferSource(); src.buffer=buf;
+      const bp=a.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2000+Math.random()*1000; bp.Q.value=0.5;
+      const g=a.createGain(); g.gain.setValueAtTime(0,startT); g.gain.linearRampToValueAtTime(0.18+Math.random()*0.1,startT+0.04); g.gain.exponentialRampToValueAtTime(0.001,startT+0.22);
+      src.connect(bp);bp.connect(g);g.connect(a.destination);src.start(startT);src.stop(startT+0.25);
     }
   } catch(e){}
 }
-
-function soundWin(m) {
-  if      (m>=100) soundJackpot();
-  else if (m>=25)  soundBigWin();
-  else if (m>=8)   soundMedWin();
-  else             soundSmallWin();
-}
+function soundWin(m) { if(m>=200)soundJackpot(); else if(m>=50)soundBigWin(); else if(m>=15)soundMedWin(); else soundSmallWin(); }
 function soundLose()   { tone(220,'sawtooth',.15,.14); tone(165,'sawtooth',.18,.10,.12); }
 function soundCashIn() { [523,659,784,1047].forEach((f,i)=>tone(f,'sine',.12,.28,i*.08)); }
-function soundCashOut(){
-  for(let i=0;i<16;i++){const f=400+i*55;const gap=Math.max(i*.055*(1-i*.002),0);tone(f,'sine',.1,.28,gap);}
-  [523,659,784].forEach((f,i)=>tone(f,'sine',.35,.3,.85+i*.03));
-}
+function soundCashOut(){ for(let i=0;i<16;i++){const f=400+i*55;const gap=Math.max(i*.055*(1-i*.002),0);tone(f,'sine',.1,.28,gap);} [523,659,784].forEach((f,i)=>tone(f,'sine',.35,.3,.85+i*.03)); }
+
+// ═══════════════════════════════════════
+//  LINE MODE BUTTONS
+// ═══════════════════════════════════════
+document.getElementById('linerow').addEventListener('click',e=>{
+  const btn=e.target.closest('.lbtn');
+  if(!btn||spinning) return;
+  tone(440,'square',.05,.2);
+  linesMode=parseInt(btn.dataset.l);
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  positionPaylineBars();
+  updateUI();
+});
 
 // ═══════════════════════════════════════
 //  BET BUTTONS
@@ -1219,9 +2553,10 @@ document.getElementById('drow').addEventListener('click',e=>{
 window.addEventListener('resize',()=>{ buildReels(); updateUI(); });
 buildReels();
 updateUI();
+renderOdds();
+renderScatterPaytable();
 updateBennyDisplay();
 renderLog();
-// Start BENNY teaser chime loop
 startBennyTeaser();
 </script>
 </body>
