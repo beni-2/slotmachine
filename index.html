@@ -8,13 +8,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
+html { touch-action: manipulation; }
+
 body {
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   background: #0a0800;
   background-image: radial-gradient(ellipse at 50% 0%, #2a1e00 0%, #080600 55%);
   display: flex; align-items: flex-start; justify-content: center;
   font-family: 'Rajdhani', sans-serif;
   padding: 10px 6px 30px;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+/* Prevent double-tap zoom on buttons */
+button { touch-action: manipulation; }
+
+@media (max-width: 480px) {
+  body { padding: 6px 3px 20px; }
+  .machine { width: 100%; max-width: 100%; }
+  .machine-outer { border-radius: 16px 16px 12px 12px; padding: 3px; }
+  .machine-inner { border-radius: 14px 14px 10px 10px; }
+  .benny-slot { width: clamp(22px,5.5vw,30px) !important; height: clamp(22px,5.5vw,30px) !important; }
+  .credits-panel { padding: 5px 6px; gap: 3px; }
+  .bet-section { padding: 5px 7px 4px; }
+  .action-section { padding: 5px 7px 7px; gap: 4px; }
+  .dbtn { font-size: clamp(.54rem,1.6vw,.7rem) !important; padding: 6px 1px !important; }
+  .bci  { font-size: clamp(.54rem,1.6vw,.68rem) !important; padding: 6px 2px !important; }
+  .bspin { font-size: clamp(.75rem,2.4vw,.95rem) !important; }
+  .spt-row { grid-template-columns: 1fr 70px 60px 65px; padding: 4px 5px; }
 }
 
 /* ══ MACHINE ══ */
@@ -442,6 +465,128 @@ body {
 }
 .spt-header span:first-child { text-align:left; }
 
+/* ══ REEL CONDITION NOTIFICATION ══ */
+.reel-cond-section {
+  background: #040404;
+  border-top: 2px solid #1a3300;
+  padding: 8px 10px 10px;
+}
+.reel-cond-title {
+  font-size: .52rem; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(80,200,40,.3); text-align: center; margin-bottom: 6px;
+}
+.reel-cond-case {
+  background: linear-gradient(160deg, #060e00 0%, #030800 60%, #060e00 100%);
+  border: 2px solid #1e4400;
+  border-radius: 14px;
+  padding: 8px 10px 8px;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(80,200,40,.06),
+    inset 0 0 16px rgba(0,0,0,.5),
+    0 0 10px rgba(40,120,0,.08);
+  overflow: hidden;
+}
+.reel-cond-case::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(180deg, rgba(80,200,40,.04), transparent);
+  border-radius: 12px 12px 0 0; pointer-events: none;
+}
+.reel-cond-case-label {
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: #040404; padding: 0 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.33rem, 1vw, .44rem);
+  color: rgba(80,200,40,.45); letter-spacing: 2px;
+  text-transform: uppercase; white-space: nowrap;
+}
+.reel-cond-body {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-bottom: 6px;
+}
+.reel-cond-rule {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(.48rem, 1.5vw, .62rem);
+  color: rgba(255,255,255,.3);
+  text-align: center; letter-spacing: .5px;
+}
+.reel-cond-hl {
+  color: #7fff40; font-weight: 700;
+  filter: drop-shadow(0 0 4px rgba(80,220,0,.5));
+}
+.reel-cond-status {
+  text-align: center; min-height: 18px;
+}
+.rcs-idle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(.48rem, 1.4vw, .6rem);
+  color: rgba(255,255,255,.18); letter-spacing: 2px;
+}
+.rcs-miss {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.44rem, 1.3vw, .56rem);
+  color: rgba(255,60,60,.55); letter-spacing: 1px;
+}
+.rcs-close {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.44rem, 1.3vw, .56rem);
+  color: rgba(255,160,0,.7); letter-spacing: 1px;
+  animation: rcsClosePulse .8s ease-in-out infinite alternate;
+}
+@keyframes rcsClosePulse {
+  from { color: rgba(255,140,0,.6); }
+  to   { color: rgba(255,200,0,.9); filter: drop-shadow(0 0 5px rgba(255,160,0,.5)); }
+}
+.rcs-hit {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.5rem, 1.5vw, .64rem);
+  font-weight: 700;
+  color: #7fff40;
+  letter-spacing: 2px;
+  filter: drop-shadow(0 0 6px rgba(80,220,0,.8));
+  animation: rcsHitPulse .5s ease-in-out infinite alternate;
+}
+@keyframes rcsHitPulse {
+  from { filter: drop-shadow(0 0 4px rgba(80,220,0,.5)); }
+  to   { filter: drop-shadow(0 0 14px rgba(150,255,0,1)); letter-spacing: 3px; }
+}
+/* Symbol count pills */
+.reel-cond-counts {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  justify-content: center; min-height: 0;
+}
+.rcc-pill {
+  display: flex; align-items: center; gap: 3px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 2px 8px 2px 5px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.38rem, 1.1vw, .5rem);
+  color: rgba(255,255,255,.35);
+  transition: all .3s;
+}
+.rcc-pill .rcc-icon { font-size: clamp(.7rem, 2.2vw, .95rem); line-height: 1; }
+.rcc-pill .rcc-n { min-width: 14px; text-align: center; }
+.rcc-pill.qualifying {
+  background: rgba(80,220,0,.1);
+  border-color: rgba(80,220,0,.5);
+  color: #7fff40;
+  box-shadow: 0 0 6px rgba(80,220,0,.15);
+  animation: pillGlow .6s ease-in-out infinite alternate;
+}
+@keyframes pillGlow {
+  from { box-shadow: 0 0 4px rgba(80,220,0,.1); }
+  to   { box-shadow: 0 0 10px rgba(80,220,0,.35); border-color: rgba(120,255,0,.8); }
+}
+.rcc-pill.close {
+  background: rgba(255,160,0,.08);
+  border-color: rgba(255,160,0,.4);
+  color: rgba(255,180,0,.8);
+}
+
 /* ══ WIN LOG ══ */
 .win-log-section {
   background:#040404;
@@ -815,6 +960,103 @@ body {
   letter-spacing:1px;
 }
 .odds-live-bet span { color:#ffd700; }
+/* ══ FRUIT BONUS PAYTABLE PANEL ══ */
+.fruit-bonus-panel {
+  background: #040404;
+  border-top: 2px solid #1a3300;
+  padding: 8px 10px 12px;
+}
+.fb-title {
+  font-size: .52rem; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(100,220,60,.35); text-align: center; margin-bottom: 2px;
+}
+.fb-subtitle {
+  font-size: .44rem; letter-spacing: 2px; color: rgba(100,220,60,.2);
+  text-align: center; margin-bottom: 7px;
+}
+.fb-case {
+  background: linear-gradient(160deg,#060e00 0%,#030900 60%,#060e00 100%);
+  border: 2px solid #1e5000;
+  border-radius: 14px;
+  padding: 10px 10px 8px;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(100,220,60,.07),
+    inset 0 0 20px rgba(0,0,0,.6),
+    0 0 14px rgba(40,140,0,.1);
+  overflow: hidden;
+}
+.fb-case::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:40%;
+  background:linear-gradient(180deg,rgba(100,220,60,.04),transparent);
+  border-radius:12px 12px 0 0; pointer-events:none;
+}
+.fb-case-label {
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  background:#040404; padding:0 8px;
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.33rem,1vw,.44rem);
+  color:rgba(100,220,60,.5); letter-spacing:2px;
+  text-transform:uppercase; white-space:nowrap;
+}
+.fb-header {
+  display:grid; grid-template-columns: 60px 1fr 90px;
+  padding: 2px 8px 5px; gap: 4px;
+}
+.fb-header span {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.33rem,1vw,.44rem);
+  color:rgba(100,220,60,.3); letter-spacing:1px; text-align:center;
+}
+.fb-header span:first-child { text-align:left; }
+.fb-rows { display:flex; flex-direction:column; gap:3px; margin-bottom:8px; }
+.fb-row {
+  display:grid; grid-template-columns: 60px 1fr 90px;
+  align-items:center; padding:5px 8px;
+  border-radius:8px; border:1px solid rgba(100,220,60,.08);
+  background:rgba(100,220,60,.02); gap:4px;
+}
+.fb-row-8 {
+  border-color:rgba(255,215,0,.35);
+  background:linear-gradient(90deg,rgba(255,215,0,.07),rgba(255,215,0,.02));
+  box-shadow:0 0 10px rgba(255,215,0,.07);
+}
+.fb-row-7 {
+  border-color:rgba(100,220,60,.25);
+  background:linear-gradient(90deg,rgba(100,220,60,.06),rgba(100,220,60,.01));
+}
+.fb-row-6 { border-color:rgba(100,220,60,.15); }
+.fb-row-5 { border-color:rgba(100,220,60,.08); }
+.fb-count {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.55rem,1.7vw,.72rem);
+  font-weight:700; color:#7fff40;
+  filter:drop-shadow(0 0 4px rgba(80,220,0,.4));
+}
+.fb-row-8 .fb-count { color:#ffd700; filter:drop-shadow(0 0 6px rgba(255,215,0,.7)); }
+.fb-mult {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.42rem,1.3vw,.55rem);
+  font-weight:700; color:rgba(100,220,60,.8); text-align:center;
+}
+.fb-row-8 .fb-mult { color:#fff8a0; }
+.fb-ex {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(.4rem,1.2vw,.52rem);
+  color:rgba(255,255,255,.45); text-align:right;
+}
+.fb-row-8 .fb-ex { color:#fff8a0; }
+.fb-icons {
+  text-align:center; font-size:clamp(.8rem,2.4vw,1rem);
+  margin-bottom:5px; letter-spacing:2px;
+  filter:drop-shadow(0 0 4px rgba(100,220,60,.3));
+}
+.fb-note {
+  font-size:clamp(.38rem,1.1vw,.5rem);
+  color:rgba(100,220,60,.2); text-align:center; letter-spacing:.5px;
+}
 </style>
 </head>
 <body>
@@ -952,7 +1194,7 @@ body {
         </tbody>
       </table>
     </div>
-    <div class="odds-note">Scatter RTP ~16% · 1★ hits ~1 in 6 spins · BENNY = ₱100,000,000 lottery</div>
+    <div class="odds-note">5+ same fruit anywhere = Fruit Bonus · Scatter RTP ~16% · BENNY = ₱100,000,000 lottery</div>
   </div>
 
   <!-- SCATTER PAYTABLE PANEL -->
@@ -965,7 +1207,58 @@ body {
         <!-- Populated by JS -->
       </div>
     </div>
-    <div class="spt-note">Free Spins: crypto lottery + pot gate — genuinely unpredictable</div>
+    <div class="spt-note">5+ same icon anywhere = Fruit Bonus · Free Spins: crypto lottery + pot gate</div>
+  </div>
+
+  <!-- FRUIT BONUS PAYTABLE PANEL -->
+  <div class="fruit-bonus-panel" id="fruitBonusPanel">
+    <div class="fb-title">◈ Fruit Bonus · Any Position ◈</div>
+    <div class="fb-subtitle">Same icon anywhere on 5×3 grid · All modes</div>
+    <div class="fb-case">
+      <div class="fb-case-label">🍀 FRUIT COUNT BONUS 🍀</div>
+      <div class="fb-header">
+        <span>Count</span><span>Return</span><span>At ₱25 Bet</span>
+      </div>
+      <div class="fb-rows">
+        <div class="fb-row fb-row-8">
+          <span class="fb-count">8+</span>
+          <span class="fb-mult">×4.0 BET</span>
+          <span class="fb-ex" id="fbEx8">₱100</span>
+        </div>
+        <div class="fb-row fb-row-7">
+          <span class="fb-count">7</span>
+          <span class="fb-mult">×2.0 BET</span>
+          <span class="fb-ex" id="fbEx7">₱50</span>
+        </div>
+        <div class="fb-row fb-row-6">
+          <span class="fb-count">6</span>
+          <span class="fb-mult">×1.0 BET</span>
+          <span class="fb-ex" id="fbEx6">₱25</span>
+        </div>
+        <div class="fb-row fb-row-5">
+          <span class="fb-count">5</span>
+          <span class="fb-mult">×0.4 BET</span>
+          <span class="fb-ex" id="fbEx5">₱10</span>
+        </div>
+      </div>
+      <div class="fb-icons">🍉 🍇 🍊 🍋 🍒 🔔 💎 7️⃣</div>
+      <div class="fb-note">Fires only when no line or scatter win — purely additive</div>
+    </div>
+  </div>
+
+  <!-- REEL CONDITION NOTIFICATION -->
+  <div class="reel-cond-section" id="reelCondSection">
+    <div class="reel-cond-title">◈ Reel Condition ◈</div>
+    <div class="reel-cond-case">
+      <div class="reel-cond-case-label">FREE SPIN TRIGGER</div>
+      <div class="reel-cond-body" id="reelCondBody">
+        <div class="reel-cond-rule">5+ of any icon anywhere on grid unlocks <span class="reel-cond-hl">5 FREE SPINS</span></div>
+        <div class="reel-cond-status" id="reelCondStatus">
+          <span class="rcs-idle">— Waiting for spin —</span>
+        </div>
+      </div>
+      <div class="reel-cond-counts" id="reelCondCounts"></div>
+    </div>
   </div>
 
   <!-- WIN LOG -->
@@ -1660,6 +1953,54 @@ function calcWin(grid) {
   return {total, maxM, wins};
 }
 
+// ─── FRUIT COUNT ANY-POSITION MICRO-WIN ───────────────────────────────────────
+// Counts every non-special symbol anywhere on the 5×3 grid (15 cells).
+// If any single symbol appears ≥5 times, a small consolation credit is awarded.
+// This fires in ALL modes (1/2/3 lines AND scatter), independently of line wins.
+// It does NOT replace or affect scatter/line evaluation — purely additive.
+// Designed as a psychological "loss-disguised-as-win" hook at low bets.
+//
+//  Count  Payout multiplier (×bet)   Approx at ₱25 bet
+//  ──────────────────────────────────────────────────
+//    5      ×0.4   (40% back)           ₱10
+//    6      ×1.0   (100% = push)        ₱25
+//    7      ×2.0   (2× bet)             ₱50
+//    8+     ×4.0   (4× bet)             ₱100
+//
+// Max 15 cells total, so 8+ is rare but possible with low-pay symbols (MELON).
+// SEVEN/DIAMOND never reach 5-count (only 1/2 copies in pool) so high-value
+// symbols never accidentally trigger this and inflate RTP.
+// ─────────────────────────────────────────────────────────────────────────────
+const FRUIT_COUNT_SPECIAL = new Set(['LB','LE','LN1','LN2','LY','SCATTER']);
+
+function calcFruitCountWin(grid) {
+  const counts = {};
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      const s = grid[c][r];
+      if (FRUIT_COUNT_SPECIAL.has(s)) continue;
+      counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+
+  let bestSym = null, bestCount = 0;
+  for (const [sym, n] of Object.entries(counts)) {
+    if (n >= 5 && n > bestCount) { bestSym = sym; bestCount = n; }
+  }
+
+  if (!bestSym) return { total: 0, sym: null, count: 0 };
+
+  // Multiplier table — keeps payout below totalBet for 5-count (LDW territory)
+  let mult;
+  if      (bestCount >= 8) mult = 4.0;
+  else if (bestCount >= 7) mult = 2.0;
+  else if (bestCount >= 6) mult = 1.0;
+  else                     mult = 0.4;   // 5-count: partial return
+
+  const total = Math.floor(bet * mult);
+  return { total, sym: bestSym, count: bestCount, mult };
+}
+
 // ═══════════════════════════════════════
 //  SPIN ENGINE — UPWARD SCROLL (symbols rise from bottom)
 //
@@ -1734,6 +2075,17 @@ function spinReel(colIdx, finalCol, startDelay, stopDelay) {
   return new Promise(resolve => {
     measureCell();
     if (reelRAF[colIdx]) { cancelAnimationFrame(reelRAF[colIdx]); reelRAF[colIdx] = null; }
+
+    // Hard safety: force-resolve after 6s to prevent mobile hang
+    let _resolved = false;
+    const _safetyTimer = setTimeout(() => {
+      if (!_resolved) {
+        const s = document.getElementById('strip'+colIdx);
+        if (s) s.style.transform = 'translateY('+(-((3+FILLER_N)*CELL_H))+'px)';
+        if (reelRAF[colIdx]) { cancelAnimationFrame(reelRAF[colIdx]); reelRAF[colIdx]=null; }
+        _resolved = true; resolve();
+      }
+    }, 6000);
 
     setTimeout(() => {
       const { strip, targetY } = buildSpinStrip(colIdx, finalCol);
@@ -1812,18 +2164,30 @@ function spinReel(colIdx, finalCol, startDelay, stopDelay) {
           playTick();
           phase = 'bounce';
 
-        // ── bounce: damped spring settles at targetY ─────────────────────
+        // ── bounce: damped spring settles at targetY (mobile-safe) ────────
         } else if (phase === 'bounce') {
-          const disp  = pos - targetY;           // negative (strip above target)
-          const force = -SPRING_K * disp;         // positive (pushes down)
-          vel = (vel + force * dt) * Math.pow(SPRING_D, dt / 16);
-          pos += vel * dt;
-          if (Math.abs(pos - targetY) < 0.4 && Math.abs(vel) < 0.4) {
+          const dtClamped = Math.min(dt, 20);  // clamp dt for mobile — prevents spring explosion
+          const disp  = pos - targetY;
+          const force = -SPRING_K * disp;
+          vel = (vel + force * dtClamped) * Math.pow(SPRING_D, dtClamped / 16);
+          pos += vel * dtClamped;
+          // Safety: if spring overshoots past targetY in wrong direction, snap and resolve
+          if (pos > targetY + 1) { pos = targetY; vel = 0; }
+          if (Math.abs(pos - targetY) < 0.5 && Math.abs(vel) < 0.5) {
             pos = targetY;
             strip.style.transform = `translateY(${targetY}px)`;
             reelState[colIdx].pos = targetY;
             reelRAF[colIdx] = null;
-            resolve();
+            if (!_resolved) { _resolved=true; clearTimeout(_safetyTimer); resolve(); }
+            return;
+          }
+          // Hard timeout safety: if bounce runs too long, force settle
+          if (ts - brakeStartTs > brakeT + 600) {
+            pos = targetY;
+            strip.style.transform = `translateY(${targetY}px)`;
+            reelState[colIdx].pos = targetY;
+            reelRAF[colIdx] = null;
+            if (!_resolved) { _resolved=true; clearTimeout(_safetyTimer); resolve(); }
             return;
           }
         }
@@ -1852,6 +2216,8 @@ async function doSpin() {
   spinning = true;
   const _betThisSpin = totalBet();
   credits -= _betThisSpin; lastWin = 0;
+
+  // resetReelCondition(); // (panel removed)
 
   // Tick the hidden free-spin pot — may award free spins this spin
   const _potTriggered = FREE_SPIN_POT.tick(_betThisSpin);
@@ -1894,6 +2260,9 @@ async function doSpin() {
   currentGrid = grid;
   await sleep(120);
 
+  // Update the reel condition notification panel
+  // renderReelCondition(grid); // (panel removed)
+
   // Check BENNY first
   const isBenny = checkBenny(grid);
   if (isBenny) { bennyActive = true; spinning = false; triggerBennyJackpot(); return; }
@@ -1912,12 +2281,31 @@ async function doSpin() {
     wins.forEach(w => document.getElementById('pl'+w.lineIdx)?.classList.add('flash'));
   }
 
+  // ── Fruit Count Any-Position Micro-Win (all modes) ────────────────────────
+  // Runs independently of line/scatter wins — purely additive consolation pay.
+  // Fires only when no regular win occurred (so it doesn't mask bigger wins).
+  const _fruitWin = (total === 0) ? calcFruitCountWin(grid) : { total: 0, sym: null, count: 0 };
+  if (_fruitWin.total > 0) {
+    total += _fruitWin.total;
+    maxM = Math.max(maxM, _fruitWin.mult * 10);  // so soundWin fires correctly
+  }
+
   lastWin = total;
   if (total > 0) {
     credits += total; soundWin(maxM);
-    if      (maxM >= 200) { setWT(`🏆  JACKPOT!  +₱${fmt(total)}`, true);  spawnCoins(20); showToast(`🏆 JACKPOT! ₱${fmt(total)}`); }
-    else if (maxM >= 50)  { setWT(`🎊  BIG WIN!  +₱${fmt(total)}`, true);  spawnCoins(10); }
-    else                  { setWT(`✦  WIN  +₱${fmt(total)}`, false);        spawnCoins(4); }
+    if (_fruitWin.total > 0 && _fruitWin.sym) {
+      // Fruit count micro-win message
+      const _icon = symById[_fruitWin.sym]?.icon || '🍀';
+      setWT(`${_icon} ×${_fruitWin.count} ANYWHERE  +₱${fmt(total)}`, false);
+      spawnCoins(3);
+      showToast(`${_icon} ${_fruitWin.count}× Anywhere! +₱${fmt(total)}`);
+    } else if (maxM >= 200) {
+      setWT(`🏆  JACKPOT!  +₱${fmt(total)}`, true);  spawnCoins(20); showToast(`🏆 JACKPOT! ₱${fmt(total)}`);
+    } else if (maxM >= 50) {
+      setWT(`🎊  BIG WIN!  +₱${fmt(total)}`, true);  spawnCoins(10);
+    } else {
+      setWT(`✦  WIN  +₱${fmt(total)}`, false);  spawnCoins(4);
+    }
     setTimeout(() => {
       [0,1,2].forEach(i => document.getElementById('pl'+i)?.classList.remove('flash'));
       clearWinCells();
@@ -1982,6 +2370,63 @@ function getFreeSpinTriggerIcons(grid) {
     }
   }
   return Object.keys(counts).filter(id => counts[id] >= 5);
+}
+
+// ─── REEL CONDITION PANEL RENDERER ────────────────────────────────────────────
+// Updates the on-body notification panel showing per-symbol counts and status.
+// Called after every spin with the resolved grid.
+function renderReelCondition(grid) {
+  const SPECIAL = new Set(['LB','LE','LN1','LN2','LY','SCATTER']);
+  const counts = {};
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      const s = grid[c][r];
+      if (SPECIAL.has(s)) continue;
+      counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+
+  const qualifying = Object.keys(counts).filter(id => counts[id] >= 5);
+  const close      = Object.keys(counts).filter(id => counts[id] === 4);
+  const statusEl   = document.getElementById('reelCondStatus');
+  const countsEl   = document.getElementById('reelCondCounts');
+
+  // ── Status line ──────────────────────────────────────────────────
+  if (qualifying.length > 0) {
+    const icons = qualifying.map(id => symById[id]?.icon || id).join(' ');
+    statusEl.innerHTML = `<span class="rcs-hit">✦ ${icons} — CONDITION MET! FREE SPINS UNLOCKED ✦</span>`;
+  } else if (close.length > 0) {
+    const icons = close.map(id => symById[id]?.icon || id).join(' ');
+    statusEl.innerHTML = `<span class="rcs-close">▲ ${icons} — SO CLOSE! (4 of 5) ▲</span>`;
+  } else {
+    const best = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
+    const bestIcon = best ? (symById[best[0]]?.icon || best[0]) : '—';
+    const bestN    = best ? best[1] : 0;
+    statusEl.innerHTML = `<span class="rcs-miss">✗ No match — best: ${bestIcon} ×${bestN}</span>`;
+  }
+
+  // ── Per-symbol count pills ────────────────────────────────────────
+  // Show all symbols that appeared, sorted by count descending
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  countsEl.innerHTML = sorted.map(([id, n]) => {
+    const sym = symById[id];
+    const icon = sym?.icon || id;
+    let cls = 'rcc-pill';
+    if (n >= 5) cls += ' qualifying';
+    else if (n === 4) cls += ' close';
+    return `<div class="${cls}">
+      <span class="rcc-icon">${icon}</span>
+      <span class="rcc-n">×${n}</span>
+    </div>`;
+  }).join('');
+}
+
+// Reset reel condition panel to idle state (called on new spin start)
+function resetReelCondition() {
+  const statusEl = document.getElementById('reelCondStatus');
+  const countsEl = document.getElementById('reelCondCounts');
+  if (statusEl) statusEl.innerHTML = '<span class="rcs-idle">— Spinning… —</span>';
+  if (countsEl) countsEl.innerHTML = '';
 }
 
 // ═══════════════════════════════════════
@@ -2114,6 +2559,8 @@ async function runFreeSpins() {
     currentGrid = grid;
     await sleep(120);
 
+  // renderReelCondition(grid); // (panel removed)
+
     // Check BENNY during free spin
     const isBenny = checkBenny(grid);
     if (isBenny) {
@@ -2139,11 +2586,22 @@ async function runFreeSpins() {
       wins.forEach(w => document.getElementById('pl'+w.lineIdx)?.classList.add('flash'));
     }
 
+    // ── Fruit Count Micro-Win during free spins ─────────────────────────────
+    const _fsFruitWin = (total === 0) ? calcFruitCountWin(grid) : { total: 0, sym: null, count: 0 };
+    if (_fsFruitWin.total > 0) {
+      total += _fsFruitWin.total;
+      maxM = Math.max(maxM, _fsFruitWin.mult * 10);
+    }
+
     // Auto-credit win — no deduction during free spins
     if (total > 0) {
       credits += total;
       soundWin(maxM);
-      if (maxM >= 200) {
+      if (_fsFruitWin.total > 0 && _fsFruitWin.sym) {
+        const _fsIcon = symById[_fsFruitWin.sym]?.icon || '🍀';
+        setWT(`${_fsIcon} ×${_fsFruitWin.count} ANYWHERE  +₱${fmt(total)} — FREE SPIN ${played}`, false);
+        spawnCoins(3);
+      } else if (maxM >= 200) {
         setWT(`🏆 JACKPOT! +₱${fmt(total)} — FREE SPIN ${played}`, true);
         spawnCoins(14);
       } else if (maxM >= 50) {
@@ -2250,6 +2708,7 @@ function updateUI() {
   document.getElementById('dWn').textContent='₱'+fmt(lastWin);
   renderOdds();
   renderScatterPaytable();
+  renderFruitBonusPanel();
 }
 
 // ═══════════════════════════════════════
@@ -2548,6 +3007,17 @@ document.getElementById('drow').addEventListener('click',e=>{
 })();
 
 // ═══════════════════════════════════════
+//  FRUIT BONUS PANEL RENDERER — live bet display
+// ═══════════════════════════════════════
+function renderFruitBonusPanel() {
+  const mults = { 8: 4.0, 7: 2.0, 6: 1.0, 5: 0.4 };
+  for (const [n, m] of Object.entries(mults)) {
+    const el = document.getElementById('fbEx' + n);
+    if (el) el.textContent = '₱' + fmt(Math.floor(bet * m));
+  }
+}
+
+// ═══════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════
 window.addEventListener('resize',()=>{ buildReels(); updateUI(); });
@@ -2555,9 +3025,15 @@ buildReels();
 updateUI();
 renderOdds();
 renderScatterPaytable();
+renderFruitBonusPanel();
 updateBennyDisplay();
 renderLog();
 startBennyTeaser();
+// Initialise reel condition panel to idle
+(function(){
+  const s = document.getElementById('reelCondStatus');
+  if(s) s.innerHTML = '<span class="rcs-idle">— Waiting for spin —</span>';
+})();
 </script>
 </body>
 </html>
